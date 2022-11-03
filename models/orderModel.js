@@ -10,8 +10,8 @@ module.exports = mongoose.model('Order', mongoose.Schema(
         orderItems: [{
             name: {type: String, required: true},
             image: {type: String, required: true},
-            quantity: {type: Number, required: true, default: 0},
-            price: {type: Number, required: true, default: 0},
+            quantity: {type: Number, required: true},
+            price: {type: Number, required: true},
             product: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Product' },
         }],
         shippingAddress: {
@@ -19,7 +19,6 @@ module.exports = mongoose.model('Order', mongoose.Schema(
             city: { type: String, required: true},
             zip: { type: String, required: true},
             country: { type: String, required: true},
-            required: true,
         },
         paymentMethod: {
             type: String,
@@ -30,7 +29,6 @@ module.exports = mongoose.model('Order', mongoose.Schema(
             status: { type: String },
             update_time: { type: String },
             email_address: { type: String },
-            required: true,
         },
         taxPrice: {
             type: Number,

@@ -1,4 +1,8 @@
-module.exports = mongoose.model('Review', mongoose.Schema(
+const mongoose = require("mongoose");
+
+//**not a database model */
+
+module.exports = mongoose.Schema(
     {
         name: {
             type: String,
@@ -15,4 +19,4 @@ module.exports = mongoose.model('Review', mongoose.Schema(
     }, {
         timestamps: true
     }
-));
+);
