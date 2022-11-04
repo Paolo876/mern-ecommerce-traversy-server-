@@ -20,16 +20,12 @@ router.get("/", asyncHandler(async (req,res) => {
  *  @access     Public
  */
 router.get("/:id", asyncHandler(async (req,res) => {
-    // if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-    //     res.status(400);
-    //     throw new Error('Invalid ID.');
-    //   }
-      const product = await Product.findById(req.params.id)
-
+    const product = await Product.findById(req.params.id )
     if(product){
         res.send(product)
     } else {
-        res.status(404).json('Product not found.')
+        res.status(404)
+        throw new Error('Product not found.')
     }
 }))
 
