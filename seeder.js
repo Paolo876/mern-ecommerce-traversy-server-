@@ -7,6 +7,7 @@ const products = require("./data/products");  //sample data
 const User = require("./models/userModel");
 const Product = require("./models/productModel");
 const Order = require("./models/orderModel");
+const UserCart = require("./models/userCart");
 const connectDB = require("./config/db");
 
 require("dotenv").config();
@@ -19,7 +20,8 @@ const importData = async () => {
         await Order.deleteMany();
         await Product.deleteMany();
         await User.deleteMany();
-
+        await UserCart.deleteMany();
+        
         const createdUsers = await User.insertMany(users) //insert users to user table
         const adminUser = createdUsers.find(item => item.isAdmin === true);
 
@@ -64,6 +66,6 @@ if(process.argv[2] === "-d") {
  *
  *      run this seeder file using terminal
  *      use command:
- *      npm data:import       
- *      npm data:destroy     
+ *      npm run data:import       
+ *      npm run data:destroy     
  */

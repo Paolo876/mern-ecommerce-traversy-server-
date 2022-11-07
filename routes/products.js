@@ -2,7 +2,6 @@ const express = require("express");
 const asyncHandler = require("express-async-handler");
 const router = express.Router();
 const Product = require("../models/productModel");
-const mongoose = require("mongoose")
 
 /*
  *  @desc       Fetch all products
