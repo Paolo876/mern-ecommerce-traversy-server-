@@ -12,6 +12,7 @@ app.use(express.json());
 //routes
 app.get("/", (req,res) => res.send("APP IS ONLINE..."))
 app.use("/api/products", require("./routes/products"))
+app.use("/api/users", require("./routes/products"))
 
 //custom errorhandling (middleware)
 app.use(notFound)

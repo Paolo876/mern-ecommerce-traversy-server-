@@ -3,8 +3,7 @@ const asyncHandler = require("express-async-handler");
 const router = express.Router();
 const Product = require("../models/productModel");
 
-/*
- *  @desc       Fetch all products
+/*  @desc       Fetch all products
  *  @route      GET /api/products
  *  @access     Public
  */
@@ -13,8 +12,7 @@ router.get("/", asyncHandler(async (req,res) => {
     res.send(products)
 }))
 
-/*
- *  @desc       Fetch product by id
+/*  @desc       Fetch product by id
  *  @route      GET /api/products/:id
  *  @access     Public
  */
