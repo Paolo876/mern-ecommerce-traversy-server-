@@ -15,3 +15,5 @@ router.get("/:id", asyncHandler(async (req,res) => {
         res.send({cartItems: []})
     }
 }))
+
+module.exports = router;

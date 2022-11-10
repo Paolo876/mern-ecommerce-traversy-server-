@@ -8,5 +8,10 @@ const User = require("../models/userModel");
  *  @access     Public
  */
 router.post("/login", asyncHandler(async (req,res) => {
-
+    const { email, password } = req.body;
+    const user = User.findOne({ email })
+    res.send({email, password})
 }))
+
+
+module.exports = router

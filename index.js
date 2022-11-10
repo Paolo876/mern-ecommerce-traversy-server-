@@ -7,12 +7,12 @@ require("dotenv").config();
 connectDB();
 const app = express(); //init express
 app.use(cors());    //to allow api connection from computer to react project
-app.use(express.json());
+app.use(express.json());    // allow json data in req.body
 
 //routes
 app.get("/", (req,res) => res.send("APP IS ONLINE..."))
 app.use("/api/products", require("./routes/products"))
-app.use("/api/users", require("./routes/products"))
+app.use("/api/users", require("./routes/auth"))
 
 //custom errorhandling (middleware)
 app.use(notFound)

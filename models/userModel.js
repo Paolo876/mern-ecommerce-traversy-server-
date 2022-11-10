@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 
-module.exports = mongoose.model('User', mongoose.Schema(
+const userSchema = mongoose.model('User', mongoose.Schema(
     {
         name: {
             type: String,
@@ -24,3 +25,10 @@ module.exports = mongoose.model('User', mongoose.Schema(
         timestamps: true
     }
 ));
+
+// custom method for encrypting password
+userSchema.methods.matchPassword = async function(enteredPassword){
+    return await bcrypt.compare(enteredPassword, this.password)
+}
+
+module.exports = userSchema
