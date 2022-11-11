@@ -2,10 +2,12 @@ const express = require("express");
 const cors = require("cors");
 const connectDB = require("./config/db");
 const { notFound, errorHandler } = require("./middlewares/errorMiddleware");
-require("dotenv").config();
+const cookieParser = require("cookie-parser");
 
 connectDB();
 const app = express(); //init express
+require("dotenv").config();
+app.use(cookieParser());
 app.use(cors());    //to allow api connection from computer to react project
 app.use(express.json());    // allow json data in req.body
 
