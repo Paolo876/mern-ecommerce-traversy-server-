@@ -89,4 +89,25 @@ router.get("/logout", asyncHandler( async (req,res) => {
 }))
 
 
+/*  @desc       update user profile
+ *  @route      PUT /api/users/update
+ *  @access     Private
+ */
+router.put("/update", cookieJwtAuth, asyncHandler( async (req,res) => {
+    const user = await User.findByIdAndUpdate(req.user.id, req.body, { new: true, returnOriginal: false });
+
+    if(user){  
+        res.json({
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            isAdmin: user.isAdmin,
+        })
+    } else {
+        res.status(400)
+        throw new Error("User not found.")
+    }
+}))
+
+
 module.exports = router
