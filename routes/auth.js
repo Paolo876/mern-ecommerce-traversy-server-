@@ -33,7 +33,7 @@ router.post("/login", asyncHandler(async (req,res) => {
 
 /*  @desc       authorize token from cookie
  *  @route      GET /api/users/authorize
- *  @access     Public
+ *  @access     Private
  */
 router.get("/authorize", cookieJwtAuth, asyncHandler( async (req,res) => {
     const user = await User.findById(req.user.id);
@@ -73,6 +73,18 @@ router.post("/register", asyncHandler( async (req,res) => {
         res.status(400)
         throw new Error("Invalid user data.")
     }
+}))
+
+
+/*  @desc       logout a user, send empty token
+ *  @route      GET /api/users/logout
+ *  @access     Public
+ */
+router.get("/logout", asyncHandler( async (req,res) => {
+    res.cookie("token", 'none', { httpOnly: true, expires: new Date(Date.now() + 2 * 1000) })
+    res
+        .status(201)
+        .send({ success: true, message: 'User logged out successfully' })
 
 }))
 

@@ -9,8 +9,7 @@ const cookieJwtAuth = require("../middlewares/cookieJwtAuth");
  *  @access     Private
  */
 router.get("/:id", cookieJwtAuth, asyncHandler(async (req,res) => {
-    const cart = await UserCart.find({'user.$id': req.params.id})
-    console.log(cart, req.params.id, req.user);
+    const cart = await UserCart.findOne({user: req.params.id})
     if(cart){
         res.send(cart)
     } else {
