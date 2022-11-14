@@ -110,19 +110,19 @@ router.put("/update", cookieJwtAuth, asyncHandler( async (req,res) => {
 }))
 
 
-/*  @desc       get a user's profile by id  ()
- *  @route      GET /api/users/update
+/*  @desc       get a user's profile by id
+ *  @route      GET /api/users/profile/:id
  *  @access     Private
  */
 router.get("/profile/:id", cookieJwtAuth, asyncHandler( async (req,res) => {
     const user = await User.findById(req.params.id);
-
     if(user){  
         res.json({
             _id: user._id,
             name: user.name,
             email: user.email,
             isAdmin: user.isAdmin,
+            createdAt: user.createdAt
             //additional information will be added here
         })
     } else {
