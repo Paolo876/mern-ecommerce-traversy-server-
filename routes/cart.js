@@ -22,14 +22,23 @@ router.get("/:id", cookieJwtAuth, asyncHandler(async (req,res) => {
  *  @route      GET /api/cart/:id
  *  @access     Private
  */
-router.post("/add/:id", cookieJwtAuth, asyncHandler(async (req,res) => {
-    const cart = await UserCart.findOne({user: req.params.id})
-    if(cart){
-        //if cart exists, add item to cart
-        res.send(cart)
+router.post("/add", cookieJwtAuth, asyncHandler(async (req,res) => {
+    let cart = await UserCart.findOne({user: req.user.id})
+    const { cartItems } = req.body;
+    if(!cart){
+        console.log(cartItems);
+        cart = await UserCart.create({
+            user: req.user.id,
+            cartItems
+        })
+        res.status(201).json(cart)
     } else {
-        //create cart, push item.
+        console.log(cart);
+        // for(const item of cartItems){
+        //     console.log(item._id)
+        // }
     }
+
 }))
 
 module.exports = router;

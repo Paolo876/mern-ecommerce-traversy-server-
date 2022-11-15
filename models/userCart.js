@@ -8,11 +8,8 @@ module.exports = mongoose.model('UserCart', mongoose.Schema(
             ref: 'User'
         },
         cartItems: [{
-            name: {type: String, required: true},
-            image: {type: String, required: true},
             quantity: {type: Number, required: true},
-            price: {type: Number, required: true},
-            product: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Product' },
+            _id: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Product' },
         }],
     }, {
         timestamps: true
