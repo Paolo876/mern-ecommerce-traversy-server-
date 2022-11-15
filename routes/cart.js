@@ -17,4 +17,19 @@ router.get("/:id", cookieJwtAuth, asyncHandler(async (req,res) => {
     }
 }))
 
+/*
+ *  @desc       Add item to user's cart
+ *  @route      GET /api/cart/:id
+ *  @access     Private
+ */
+router.post("/add/:id", cookieJwtAuth, asyncHandler(async (req,res) => {
+    const cart = await UserCart.findOne({user: req.params.id})
+    if(cart){
+        //if cart exists, add item to cart
+        res.send(cart)
+    } else {
+        //create cart, push item.
+    }
+}))
+
 module.exports = router;
