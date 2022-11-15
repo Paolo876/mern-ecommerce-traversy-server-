@@ -16,6 +16,7 @@ app.get("/", (req,res) => res.send("APP IS ONLINE..."))
 app.use("/api/products", require("./routes/products"))
 app.use("/api/cart", require("./routes/cart"))
 app.use("/api/users", require("./routes/auth"))
+app.use("/api/orders", require("./routes/orders"))
 
 //custom errorhandling (middleware)
 app.use(notFound)

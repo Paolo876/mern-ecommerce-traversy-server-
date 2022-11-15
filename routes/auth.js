@@ -4,7 +4,7 @@ const router = express.Router();
 const User = require("../models/userModel");
 const generateToken = require("../utils/generateToken");
 const cookieJwtAuth = require("../middlewares/cookieJwtAuth");
-
+const bcrypt = require("bcryptjs");
 
 /*  @desc       Auth user & get token
  *  @route      POST /api/users/login
@@ -94,7 +94,12 @@ router.get("/logout", asyncHandler( async (req,res) => {
  *  @access     Private
  */
 router.put("/update", cookieJwtAuth, asyncHandler( async (req,res) => {
-    const user = await User.findByIdAndUpdate(req.user.id, req.body, { new: true, returnOriginal: false });
+    const updates = req.body;
+    if(updates.password) {
+        const salt = await bcrypt.genSalt(10)
+        updates.password = await bcrypt.hash(updates.password, salt)
+    }
+    const user = await User.findByIdAndUpdate(req.user.id, updates, { new: true, returnOriginal: false });
 
     if(user){  
         res.json({

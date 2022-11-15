@@ -34,7 +34,9 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
 //encrypt password on db
 userSchema.pre('save', async function(next) {
 
-    if(!this.isModified('password')) next();        // <-mongoose provided method
+    if (!this.isModified('password')) {// <-mongoose provided method
+        next()
+    }     
     
     const salt = await bcrypt.genSalt(10)
     this.password = await bcrypt.hash(this.password, salt)
