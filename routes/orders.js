@@ -3,7 +3,7 @@ const asyncHandler = require("express-async-handler");
 const router = express.Router();
 const cookieJwtAuth = require("../middlewares/cookieJwtAuth");
 const Order = require("../models/orderModel");
-
+const UserCart = require("../models/userCart")
 /*
  *  @desc       create new order
  *  @route      POST /api/orders
@@ -11,7 +11,6 @@ const Order = require("../models/orderModel");
  */
 router.post("/", cookieJwtAuth, asyncHandler(async (req,res) => {
     const { orderItems, shippingAddress, paymentMethod, itemsTotalAmount, shippingAmount, taxAmount, totalAmount } = req.body;
-
     if(orderItems && orderItems.length !== 0) {
         /*
             -future changes: 
@@ -21,7 +20,7 @@ router.post("/", cookieJwtAuth, asyncHandler(async (req,res) => {
         */
         const order = await Order.create({
             orderItems,
-            user: req.user._id,
+            user: req.user.id,
             shippingAddress,
             paymentMethod,
             itemsTotalAmount,
@@ -30,7 +29,8 @@ router.post("/", cookieJwtAuth, asyncHandler(async (req,res) => {
             totalAmount,
             orderStatus: "processing"
         })
-
+        
+        await UserCart.findOneAndUpdate({user: req.user.id}, {cartItems: []}) //delete items in cart
         res.status(201).json(order)
     } else {
         res.status(400)
