@@ -30,17 +30,22 @@ module.exports = mongoose.model('Order', mongoose.Schema(
             update_time: { type: String },
             email_address: { type: String },
         },
-        taxPrice: {
+        taxAmount: {
             type: Number,
             required: true,
             default: 0.00
         },
-        shippingPrice: {
+        shippingAmount: {
             type: Number,
             required: true,
             default: 0.00
         },
-        totalPrice: {
+        itemsTotalAmount: {
+            type: Number,
+            required: true,
+            default: 0.00
+        },
+        totalAmount: {
             type: Number,
             required: true,
             default: 0.00
@@ -49,6 +54,11 @@ module.exports = mongoose.model('Order', mongoose.Schema(
             type: Boolean,
             required: true,
             default: false
+        },
+        isPaid: {
+            type: String,
+            required: true,
+            default: "processing"
         },
         paidAt: {
             type: Date,
