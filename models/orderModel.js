@@ -55,7 +55,7 @@ module.exports = mongoose.model('Order', mongoose.Schema(
             required: true,
             default: false
         },
-        isPaid: {
+        orderStatus: {
             type: String,
             required: true,
             default: "processing"
