@@ -14,7 +14,7 @@ router.post("/", cookieJwtAuth, asyncHandler(async (req,res) => {
     if(orderItems && orderItems.length !== 0) {
         /*
             -future changes: 
-               - orderItems will only retrieve id and quantity
+               - orderItems will only retrieve id, quantity, and price (price must be validated, check if price on db matches.)
                - a separate route for amount computations, etc...(frontend will not do any computations)
                - only orderItems, shippingAddress, and paymentMethod will be in req.body
         */
@@ -28,13 +28,33 @@ router.post("/", cookieJwtAuth, asyncHandler(async (req,res) => {
             taxAmount,
             totalAmount,
             orderStatus: "processing"
-        })
+        }) 
         
         await UserCart.findOneAndUpdate({user: req.user.id}, {cartItems: []}) //delete items in cart
         res.status(201).json(order)
     } else {
         res.status(400)
         throw new Error("No items found")
+    }
+}))
+
+/*
+ *  @desc       get order by id
+ *  @route      GET /api/orders/:id
+ *  @access     Private
+ */
+router.get("/:id", cookieJwtAuth, asyncHandler(async ( req,res ) => {
+    const order = await Order.findById(req.params.id);
+    if(order){
+        if(order.user.toString() === req.user.id){      //only return if logged in user placed the order.
+            res.json(order)
+        } else {
+            throw new Error("Not authorized.")
+        }    
+    } else {
+        res.status(404)
+        throw new Error("Order not found.")
+
     }
 }))
 

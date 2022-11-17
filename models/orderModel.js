@@ -11,7 +11,7 @@ module.exports = mongoose.model('Order', mongoose.Schema(
             // name: {type: String, required: true},
             // image: {type: String, required: true},
             quantity: {type: Number, required: true},
-            // price: {type: Number, required: true},
+            price: {type: Number, required: true},
             _id: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Product' },
         }],
         shippingAddress: {
