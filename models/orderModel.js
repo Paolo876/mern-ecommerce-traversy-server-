@@ -15,6 +15,7 @@ module.exports = mongoose.model('Order', mongoose.Schema(
             _id: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Product' },
         }],
         shippingAddress: {
+            name: { type: String, required: true},
             address: { type: String, required: true},
             city: { type: String, required: true},
             postalCode: { type: String, required: true},
