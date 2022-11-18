@@ -38,6 +38,7 @@ router.post("/", cookieJwtAuth, asyncHandler(async (req,res) => {
     }
 }))
 
+
 /*
  *  @desc       get order by id
  *  @route      GET /api/orders/:id
@@ -48,6 +49,38 @@ router.get("/:id", cookieJwtAuth, asyncHandler(async ( req,res ) => {
     if(order){
         if(order.user.toString() === req.user.id){      //only return if logged in user placed the order.
             res.json(order)
+        } else {
+            throw new Error("Not authorized.")
+        }    
+    } else {
+        res.status(404)
+        throw new Error("Order not found.")
+
+    }
+}))
+
+
+/*
+ *  @desc       update order to paid
+ *  @route      GET /api/orders/:id/pay
+ *  @access     Private
+ */
+router.get("/:id/pay", cookieJwtAuth, asyncHandler(async ( req,res ) => {
+    const order = await Order.findById(req.params.id);
+
+    if(order){
+        if(order.user.toString() === req.user.id){      //only return if logged in user placed the order.
+            order.isPaid = true
+            order.paidAt = Date.now()
+            order.paymentResult = {
+                id: req.body.id,
+                status: req.body.status,
+                update_time: req.body.update_time,
+                email_address: req.body.payer.email_address
+            }
+
+            const updatedOrder = await order.save();
+            res.json(updatedOrder)
         } else {
             throw new Error("Not authorized.")
         }    
