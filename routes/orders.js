@@ -14,7 +14,7 @@ router.post("/", cookieJwtAuth, asyncHandler(async (req,res) => {
     if(req.body.orderItems && req.body.orderItems.length !== 0) {
         /*
             -future changes: 
-               - orderItems will only retrieve id, quantity, and price (price must be validated, check if price on db matches.)
+               - orderItems will only retrieve id, quantity, and price (price must be validated, check if current price on db matches.)
                - a separate route for amount computations, etc...(frontend will not do any computations)
                - only orderItems, shippingAddress, and paymentMethod will be in req.body
         */
@@ -30,7 +30,6 @@ router.post("/", cookieJwtAuth, asyncHandler(async (req,res) => {
             // orderStatus: "processing"
             ...req.body, user: req.user.id,
         }) 
-        
         await UserCart.findOneAndUpdate({user: req.user.id}, {cartItems: []}) //delete items in cart
         res.status(201).json(order)
     } else {
