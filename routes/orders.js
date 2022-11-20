@@ -10,8 +10,8 @@ const UserCart = require("../models/userCart")
  *  @access     Private
  */
 router.post("/", cookieJwtAuth, asyncHandler(async (req,res) => {
-    const { orderItems, shippingAddress, paymentMethod, itemsTotalAmount, shippingAmount, taxAmount, totalAmount } = req.body;
-    if(orderItems && orderItems.length !== 0) {
+    // const { orderItems, shippingAddress, paymentMethod, itemsTotalAmount, shippingAmount, taxAmount, totalAmount } = req.body;
+    if(req.body.orderItems && req.body.orderItems.length !== 0) {
         /*
             -future changes: 
                - orderItems will only retrieve id, quantity, and price (price must be validated, check if price on db matches.)
@@ -19,15 +19,16 @@ router.post("/", cookieJwtAuth, asyncHandler(async (req,res) => {
                - only orderItems, shippingAddress, and paymentMethod will be in req.body
         */
         const order = await Order.create({
-            orderItems,
-            user: req.user.id,
-            shippingAddress,
-            paymentMethod,
-            itemsTotalAmount,
-            shippingAmount,
-            taxAmount,
-            totalAmount,
-            orderStatus: "processing"
+            // orderItems,
+            // user: req.user.id,
+            // shippingAddress,
+            // paymentMethod,
+            // itemsTotalAmount,
+            // shippingAmount,
+            // taxAmount,
+            // totalAmount,
+            // orderStatus: "processing"
+            ...req.body, user: req.user.id,
         }) 
         
         await UserCart.findOneAndUpdate({user: req.user.id}, {cartItems: []}) //delete items in cart
