@@ -18,6 +18,7 @@ app.use("/api/cart", require("./routes/cart"))
 app.use("/api/users", require("./routes/auth"))
 app.use("/api/orders", require("./routes/orders"))
 
+app.get("/api/config/paypal", (req, res) => res.send(process.env.PAYPAL_CLIENT_ID))
 //custom errorhandling (middleware)
 app.use(notFound)
 app.use(errorHandler)
