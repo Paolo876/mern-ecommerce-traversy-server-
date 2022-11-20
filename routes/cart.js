@@ -53,9 +53,10 @@ router.post("/add", cookieJwtAuth, asyncHandler(async (req,res) => {
 
 }))
 
+
 /*
  *  @desc       change quantity of cart items
- *  @route      GET /api/cart/:id
+ *  @route      PUT /api/cart/change-quantity
  *  @access     Private
  */
 router.put("/change-quantity", cookieJwtAuth, asyncHandler(async (req,res) => {
@@ -69,6 +70,20 @@ router.put("/change-quantity", cookieJwtAuth, asyncHandler(async (req,res) => {
 
     cart.save()
     res.status(201).json(cartItem)
+}))
+
+/*
+ *  @desc       remove item from cart
+ *  @route      PUT /api/cart/remove
+ *  @access     Private
+ */
+router.put("/remove-item", cookieJwtAuth, asyncHandler(async (req,res) => {
+    const cart = await UserCart.findOne({user: req.user.id})
+    const itemId = req.body.id
+    const cartItems = cart.cartItems.filter(item => item._id.toString() !== itemId)
+    cart.cartItems = cartItems
+    cart.save()
+    res.status(201).json(itemId)
 }))
 
 module.exports = router;
