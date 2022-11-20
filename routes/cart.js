@@ -53,4 +53,22 @@ router.post("/add", cookieJwtAuth, asyncHandler(async (req,res) => {
 
 }))
 
+/*
+ *  @desc       change quantity of cart items
+ *  @route      GET /api/cart/:id
+ *  @access     Private
+ */
+router.put("/change-quantity", cookieJwtAuth, asyncHandler(async (req,res) => {
+    const cart = await UserCart.findOne({user: req.user.id})
+    const reqItem = req.body.item
+    const cartItem = cart.cartItems.find(item => item._id.toString() === reqItem._id)
+    cartItem.quantity = reqItem.quantity;
+
+    const product = await Products.findById(reqItem._id); //check product if there is enough in stock
+    if(cartItem.quantity > product.countInStock) cartItem.quantity = product.countInStock
+
+    cart.save()
+    res.status(201).json(cartItem)
+}))
+
 module.exports = router;
