@@ -40,6 +40,23 @@ router.post("/", cookieJwtAuth, asyncHandler(async (req,res) => {
 
 
 /*
+ *  @desc       get all orders of user
+ *  @route      GET /api/orders/
+ *  @access     Private
+ */
+router.get("/", cookieJwtAuth, asyncHandler(async ( req,res ) => {
+    const orders = await Order.find({user: req.user.id})
+    if(orders){
+        res.status(201).json(orders)    
+    } else {
+        res.status(404)
+        throw new Error("Order not found.")
+
+    }
+}))
+
+
+/*
  *  @desc       get order by id
  *  @route      GET /api/orders/:id
  *  @access     Private
@@ -58,7 +75,6 @@ router.get("/:id", cookieJwtAuth, asyncHandler(async ( req,res ) => {
 
     }
 }))
-
 
 /*
  *  @desc       update order to paid
