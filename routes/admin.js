@@ -12,7 +12,7 @@ const User = require("../models/userModel");
  */
 router.get("/get-users", cookieJwtAuth, adminMiddleware, asyncHandler(async (req,res) => {
     const users = await User.find({});
-    res.json(users)
+    res.json(users.filter(item => item._id.toString() !== req.user.id))
 }))
 
 
