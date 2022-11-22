@@ -11,7 +11,7 @@ const User = require("../models/userModel");
  *  @access     Private/Admin
  */
 router.get("/get-users", cookieJwtAuth, adminMiddleware, asyncHandler(async (req,res) => {
-    const users = await User.find({});
+    const users = await User.find({}).select("-password");
     res.json(users.filter(item => item._id.toString() !== req.user.id))
 }))
 
