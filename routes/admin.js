@@ -7,12 +7,42 @@ const User = require("../models/userModel");
 
 
 /*  @desc       Get all users
- *  @route      POST /api/admin/get-users
+ *  @route      GET /api/admin/get-users
  *  @access     Private/Admin
  */
 router.get("/get-users", cookieJwtAuth, adminMiddleware, asyncHandler(async (req,res) => {
     const users = await User.find({}).select("-password");
     res.json(users.filter(item => item._id.toString() !== req.user.id))
+}))
+
+/*  @desc       Get user by id
+ *  @route      GET /api/admin/users/:id
+ *  @access     Private/Admin
+ */
+router.get("/users/:id", cookieJwtAuth, adminMiddleware, asyncHandler(async (req,res) => {
+    const user = await User.findById(req.params.id).select("-password");
+    if(user){
+        res.json(user)
+    } else {
+        res.status(404)
+        throw new Error ('User not found')
+    }
+}))
+
+/*  @desc       Update user's name and isAdmin property
+ *  @route      PUT /api/admin/users/:id/update
+ *  @access     Private/Admin
+ */
+router.put("/users/:id/update", cookieJwtAuth, adminMiddleware, asyncHandler(async (req,res) => {
+    const { name, isAdmin } = req.body; //to add more options in the future
+    const user = await User.findByIdAndUpdate(req.params.id, { name, isAdmin }, { new: true, returnOriginal: false }).select("-password");
+    
+    if(user){
+        res.json(user)
+    } else {
+        res.status(404)
+        throw new Error ('User not found')
+    }
 }))
 
 /*  @desc       delete user by id
