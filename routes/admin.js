@@ -4,6 +4,7 @@ const cookieJwtAuth = require("../middlewares/cookieJwtAuth");
 const adminMiddleware = require("../middlewares/adminMiddleware");
 const router = express.Router();
 const User = require("../models/userModel");
+const Order = require("../models/orderModel");
 
 
 /*  @desc       Get all users
@@ -15,21 +16,22 @@ router.get("/get-users", cookieJwtAuth, adminMiddleware, asyncHandler(async (req
     res.json(users.filter(item => item._id.toString() !== req.user.id))
 }))
 
-/*  @desc       Get user by id
+/*  @desc       Get user info and orders by id
  *  @route      GET /api/admin/users/:id
  *  @access     Private/Admin
  */
 router.get("/users/:id", cookieJwtAuth, adminMiddleware, asyncHandler(async (req,res) => {
     const user = await User.findById(req.params.id).select("-password");
+    const orders = await Order.find({user: req.params.id})
     if(user){
-        res.json(user)
+        res.json({user, orders})
     } else {
         res.status(404)
         throw new Error ('User not found')
     }
 }))
 
-/*  @desc       Update user's name and isAdmin property
+/*  @desc       Update user's information ( currently only name & isAdmin property)
  *  @route      PUT /api/admin/users/:id/update
  *  @access     Private/Admin
  */

@@ -4,6 +4,8 @@ const router = express.Router();
 const cookieJwtAuth = require("../middlewares/cookieJwtAuth");
 const Order = require("../models/orderModel");
 const UserCart = require("../models/userCart")
+
+
 /*
  *  @desc       create new order
  *  @route      POST /api/orders
@@ -19,18 +21,13 @@ router.post("/", cookieJwtAuth, asyncHandler(async (req,res) => {
                - only orderItems, shippingAddress, and paymentMethod will be in req.body
         */
         const order = await Order.create({
-            // orderItems,
-            // user: req.user.id,
-            // shippingAddress,
-            // paymentMethod,
-            // itemsTotalAmount,
-            // shippingAmount,
-            // taxAmount,
-            // totalAmount,
-            // orderStatus: "processing"
-            ...req.body, user: req.user.id,
+            ...req.body, 
+            user: req.user.id,
         }) 
         await UserCart.findOneAndUpdate({user: req.user.id}, {cartItems: []}) //delete items in cart
+
+        //deduct product countInStock quantity to each cartItem quantity
+        //-------
         res.status(201).json(order)
     } else {
         res.status(400)
