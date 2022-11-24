@@ -5,7 +5,9 @@ const adminMiddleware = require("../middlewares/adminMiddleware");
 const router = express.Router();
 const User = require("../models/userModel");
 const Order = require("../models/orderModel");
+const Product = require("../models/productModel");
 
+// USERS
 
 /*  @desc       Get all users
  *  @route      GET /api/admin/get-users
@@ -62,5 +64,22 @@ router.delete("/delete-user/:id", cookieJwtAuth, adminMiddleware, asyncHandler(a
     }
 }))
 
+
+// PRODUCTS
+
+/*  @desc       DELETE product by id
+ *  @route      DELETE /api/admin/products/:id
+ *  @access     Private/Admin
+ */
+router.delete("/products/:id", cookieJwtAuth, adminMiddleware, asyncHandler(async (req,res) => {
+    const product = await Product.findById(req.params.id)
+    if(product){        
+        await product.remove();
+        res.json({ message: "Product Removed.", id: req.params.id })
+    } else {
+        res.status(404)
+        throw new Error('Product not found.')
+    }
+}))
 
 module.exports = router
