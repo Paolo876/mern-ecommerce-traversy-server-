@@ -82,4 +82,30 @@ router.delete("/products/:id", cookieJwtAuth, adminMiddleware, asyncHandler(asyn
     }
 }))
 
+/*  @desc       CREATE product
+ *  @route      POST /api/admin/products
+ *  @access     Private/Admin
+ */
+router.POST("/products", cookieJwtAuth, adminMiddleware, asyncHandler(async (req,res) => {
+    const { name, price, image, brand, category, countInStock, numReviews, description } = req.body;
+    const product = await Product.create({
+        name,
+        price,
+        user: req.user.id,
+        image,
+        brand,
+        category,
+        countInStock,
+        numReviews,
+        description,
+    })
+
+    if(product){
+        res.status(201).send(product)
+    } else {
+        res.status(404)
+        throw new Error('Failed to create product.') 
+    }
+}))
+
 module.exports = router
