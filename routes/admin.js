@@ -86,7 +86,7 @@ router.delete("/products/:id", cookieJwtAuth, adminMiddleware, asyncHandler(asyn
  *  @route      POST /api/admin/products
  *  @access     Private/Admin
  */
-router.POST("/products", cookieJwtAuth, adminMiddleware, asyncHandler(async (req,res) => {
+router.post("/products", cookieJwtAuth, adminMiddleware, asyncHandler(async (req,res) => {
     const { name, price, image, brand, category, countInStock, numReviews, description } = req.body;
     const product = await Product.create({
         name,
@@ -105,6 +105,21 @@ router.POST("/products", cookieJwtAuth, adminMiddleware, asyncHandler(async (req
     } else {
         res.status(404)
         throw new Error('Failed to create product.') 
+    }
+}))
+
+/*  @desc       UPDATE product
+ *  @route      PUT /api/admin/products/:id
+ *  @access     Private/Admin
+ */
+router.put("/products/:id", cookieJwtAuth, adminMiddleware, asyncHandler(async (req,res) => {
+    const updates = req.body;
+    const product = await Product.findByIdAndUpdate(req.params.id, updates, { new: true, returnOriginal: false });;
+    if(product){
+        res.status(201).json(product)
+    } else {
+        res.status(404)
+        throw new Error('Product not found.') 
     }
 }))
 
