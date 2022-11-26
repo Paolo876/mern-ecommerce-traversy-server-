@@ -137,4 +137,21 @@ router.put("/products/:id", cookieJwtAuth, adminMiddleware, asyncHandler(async (
     }
 }))
 
+//ORDERS
+
+
+/*  @desc       GET all orders
+ *  @route      GET /api/admin/orders
+ *  @access     Private/Admin
+ */
+router.get("/orders", cookieJwtAuth, adminMiddleware, asyncHandler(async (req,res) => {
+    const orders = await Order.find({}).populate("user", "id name")
+    if(orders){
+        res.status(201).json(orders)
+    } else {
+        res.status(404)
+        throw new Error('Product not found.') 
+    }
+}))
+
 module.exports = router
