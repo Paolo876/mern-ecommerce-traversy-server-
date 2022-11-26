@@ -18,6 +18,8 @@ app.use("/api/cart", require("./routes/cart"))
 app.use("/api/users", require("./routes/auth"))
 app.use("/api/orders", require("./routes/orders"))
 app.use("/api/admin", require("./routes/admin"))
+app.use("/api/imagekit", require("./routes/imagekit"));
+
 app.get("/api/config/paypal", (req, res) => res.send(process.env.PAYPAL_CLIENT_ID)) //get route to send paypal client id to client
 //custom errorhandling (middleware)
 app.use(notFound)

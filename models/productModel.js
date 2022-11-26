@@ -13,8 +13,10 @@ module.exports = mongoose.model('Product', mongoose.Schema(
             required: true,
         },
         image: {
-            type: String,
-            required: true,
+            url: { type: String, required: true},
+            id: { type: String, required: true},
+            name: { type: String, required: true},
+            thumbnail: { type: String, required: true},
         },
         brand: {
             type: String,

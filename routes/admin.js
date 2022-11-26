@@ -6,6 +6,8 @@ const router = express.Router();
 const User = require("../models/userModel");
 const Order = require("../models/orderModel");
 const Product = require("../models/productModel");
+const ImageKit = require('imagekit');
+require("dotenv").config();
 
 // USERS
 
@@ -88,24 +90,43 @@ router.delete("/products/:id", cookieJwtAuth, adminMiddleware, asyncHandler(asyn
  */
 router.post("/products", cookieJwtAuth, adminMiddleware, asyncHandler(async (req,res) => {
     const { name, price, image, brand, category, countInStock, numReviews, description } = req.body;
-    const product = await Product.create({
-        name,
-        price,
-        user: req.user.id,
-        image,
-        brand,
-        category,
-        countInStock,
-        numReviews,
-        description,
-    })
 
-    if(product){
-        res.status(201).send(product)
-    } else {
+    try{
+        const imagekit = new ImageKit({
+            urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT,
+            publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
+            privateKey: process.env.IMAGEKIT_PRIVATE_KEY
+        });
+        const imageData = await imagekit.upload({
+            file : image, //required
+            fileName : `${name}_primary`,   //required
+            folder: "/mern-traversy/products"
+        })
+        console.log(imageData);
+    } catch(err){
         res.status(404)
-        throw new Error('Failed to create product.') 
+        throw new Error(err.message) 
     }
+
+    
+    // const product = await Product.create({
+    //     name,
+    //     price,
+    //     image: {url: imageData.url, id: imageData.fileId, name: imageData.name, thumbnail: imageData.thumbnail}
+    //     user: req.user.id,
+    //     brand,
+    //     category,
+    //     countInStock,
+    //     numReviews,
+    //     description,
+    // })
+
+    // if(product){
+    //     res.status(201).send(product)
+    // } else {
+    //     res.status(404)
+    //     throw new Error('Failed to create product.') 
+    // }
 }))
 
 /*  @desc       UPDATE product
@@ -116,7 +137,7 @@ router.put("/products/:id", cookieJwtAuth, adminMiddleware, asyncHandler(async (
     const updates = req.body;
     const product = await Product.findByIdAndUpdate(req.params.id, updates, { new: true, returnOriginal: false });;
     if(product){
-        res.status(201).json(product)
+        res.status(201).json({ message: "Product Updated.", product})
     } else {
         res.status(404)
         throw new Error('Product not found.') 
