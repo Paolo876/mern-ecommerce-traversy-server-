@@ -3,14 +3,13 @@ const cors = require("cors");
 const connectDB = require("./config/db");
 const { notFound, errorHandler } = require("./middlewares/errorMiddleware");
 const cookieParser = require("cookie-parser");
-
+// const bodyParser = require('body-parser')
 connectDB();
 const app = express(); //init express
 require("dotenv").config();
 app.use(cookieParser());
 app.use(cors({credentials: true, origin: 'http://localhost:3000'}));    //to allow api connection from computer to react project
-app.use(express.json());    // allow json data in req.body
-
+app.use(express.json({ limit: "20mb" }));    // allow json data in req.body
 //routes
 app.get("/", (req,res) => res.send("APP IS ONLINE..."))
 app.use("/api/products", require("./routes/products"))

@@ -1,4 +1,5 @@
 const express = require("express");
+require("dotenv").config();
 const asyncHandler = require("express-async-handler");
 const cookieJwtAuth = require("../middlewares/cookieJwtAuth");
 const adminMiddleware = require("../middlewares/adminMiddleware");
@@ -7,7 +8,6 @@ const User = require("../models/userModel");
 const Order = require("../models/orderModel");
 const Product = require("../models/productModel");
 const ImageKit = require('imagekit');
-require("dotenv").config();
 
 // USERS
 
@@ -90,6 +90,7 @@ router.delete("/products/:id", cookieJwtAuth, adminMiddleware, asyncHandler(asyn
  */
 router.post("/products", cookieJwtAuth, adminMiddleware, asyncHandler(async (req,res) => {
     const { name, price, image, brand, category, countInStock, numReviews, description } = req.body;
+    console.log(req.body);
 
     try{
         const imagekit = new ImageKit({
@@ -103,30 +104,22 @@ router.post("/products", cookieJwtAuth, adminMiddleware, asyncHandler(async (req
             folder: "/mern-traversy/products"
         })
         console.log(imageData);
+        const product = await Product.create({
+            name,
+            price,
+            image: { url: imageData.url, id: imageData.fileId, name: imageData.name, thumbnail: imageData.thumbnailUrl },
+            user: req.user.id,
+            brand,
+            category,
+            countInStock,
+            numReviews,
+            description,
+        })
+        res.status(201).send(product)
     } catch(err){
         res.status(404)
-        throw new Error(err.message) 
+        throw new Error("Failed to create product") 
     }
-
-    
-    // const product = await Product.create({
-    //     name,
-    //     price,
-    //     image: {url: imageData.url, id: imageData.fileId, name: imageData.name, thumbnail: imageData.thumbnail}
-    //     user: req.user.id,
-    //     brand,
-    //     category,
-    //     countInStock,
-    //     numReviews,
-    //     description,
-    // })
-
-    // if(product){
-    //     res.status(201).send(product)
-    // } else {
-    //     res.status(404)
-    //     throw new Error('Failed to create product.') 
-    // }
 }))
 
 /*  @desc       UPDATE product
