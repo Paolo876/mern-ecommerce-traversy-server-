@@ -161,9 +161,13 @@ router.get("/orders", cookieJwtAuth, adminMiddleware, asyncHandler(async (req,re
  *  @access     Private/Admin
  */
 router.put("/orders/:id/update", cookieJwtAuth, adminMiddleware, asyncHandler(async (req,res) => {
-    const { orderStatus, trackingNumber, cancelReason, isDelivered } = req.body;
+    const { trackingNumber, cancelReason, isDelivered } = req.body;
     let deliveredAt = null;
-    if(isDelivered) deliveredAt = new Date()
+    let orderStatus = req.body.orderStatus;
+    if(isDelivered) {
+        deliveredAt = new Date();
+        orderStatus = "completed"
+    }
     const order = await Order.findByIdAndUpdate(req.params.id, { orderStatus, trackingNumber, cancelReason, isDelivered, deliveredAt }, { new: true, returnOriginal: false })
     if(order){
         res.status(201).json(order)
