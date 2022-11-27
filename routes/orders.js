@@ -3,7 +3,8 @@ const asyncHandler = require("express-async-handler");
 const router = express.Router();
 const cookieJwtAuth = require("../middlewares/cookieJwtAuth");
 const Order = require("../models/orderModel");
-const UserCart = require("../models/userCart")
+const UserCart = require("../models/userCart");
+const User = require("../models/userModel");
 
 
 /*
@@ -60,8 +61,9 @@ router.get("/", cookieJwtAuth, asyncHandler(async ( req,res ) => {
  */
 router.get("/:id", cookieJwtAuth, asyncHandler(async ( req,res ) => {
     const order = await Order.findById(req.params.id);
+    const user = await User.findById(req.user.id)
     if(order){
-        if(order.user.toString() === req.user.id){      //only return if logged in user placed the order.
+        if(order.user.toString() === req.user.id || user.isAdmin){      //only return if logged in user placed the order or user is admin.
             res.json(order)
         } else {
             throw new Error("Not authorized.")

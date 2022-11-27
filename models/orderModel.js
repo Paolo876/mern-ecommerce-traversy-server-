@@ -61,6 +61,16 @@ module.exports = mongoose.model('Order', mongoose.Schema(
             required: true,
             default: "processing"
         },
+        trackingNumber: {
+            type: String,
+            required: true,
+            default: ""
+        },
+        cancelReason: {
+            type: String,
+            required: true,
+            default: ""
+        },
         paidAt: {
             type: Date,
         },

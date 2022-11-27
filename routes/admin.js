@@ -145,12 +145,29 @@ router.put("/products/:id", cookieJwtAuth, adminMiddleware, asyncHandler(async (
  *  @access     Private/Admin
  */
 router.get("/orders", cookieJwtAuth, adminMiddleware, asyncHandler(async (req,res) => {
-    const orders = await Order.find({}).populate("user", "id name")
+    const orders = await Order.find({}).populate("user", "id name email")
     if(orders){
         res.status(201).json(orders)
     } else {
         res.status(404)
-        throw new Error('Product not found.') 
+        throw new Error('Order not found.') 
+    }
+}))
+
+
+
+/*  @desc       Update order (orderStatus, isDelivered)
+ *  @route      PUT /api/admin/orders/:id/update
+ *  @access     Private/Admin
+ */
+router.put("/orders/:id/update", cookieJwtAuth, adminMiddleware, asyncHandler(async (req,res) => {
+    const order = await Order.findByIdAndUpdate(req.params.id, { orderStatus, isDelivered }, { new: true, returnOriginal: false })
+
+    if(order){
+        res.status(201).json(order)
+    } else {
+        res.status(404)
+        throw new Error('Order not found.') 
     }
 }))
 
