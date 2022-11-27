@@ -63,16 +63,13 @@ module.exports = mongoose.model('Order', mongoose.Schema(
         },
         trackingNumber: {
             type: String,
-            required: true,
+            required: false,
             default: ""
         },
         cancelReason: {
             type: String,
-            required: true,
+            required: false,
             default: ""
-        },
-        paidAt: {
-            type: Date,
         },
         isDelivered: {
             type: Boolean,
@@ -81,6 +78,8 @@ module.exports = mongoose.model('Order', mongoose.Schema(
         },
         deliveredAt: {
             type: Date,
+            required: false,
+            default: ""
         },
     }, {
         timestamps: true

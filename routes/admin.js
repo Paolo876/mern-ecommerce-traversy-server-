@@ -156,13 +156,15 @@ router.get("/orders", cookieJwtAuth, adminMiddleware, asyncHandler(async (req,re
 
 
 
-/*  @desc       Update order (orderStatus, isDelivered)
+/*  @desc       Update order (orderStatus, trackingNumber, cancelReason, isDelivered)
  *  @route      PUT /api/admin/orders/:id/update
  *  @access     Private/Admin
  */
 router.put("/orders/:id/update", cookieJwtAuth, adminMiddleware, asyncHandler(async (req,res) => {
-    const order = await Order.findByIdAndUpdate(req.params.id, { orderStatus, isDelivered }, { new: true, returnOriginal: false })
-
+    const { orderStatus, trackingNumber, cancelReason, isDelivered } = req.body;
+    let deliveredAt = null;
+    if(isDelivered) deliveredAt = new Date()
+    const order = await Order.findByIdAndUpdate(req.params.id, { orderStatus, trackingNumber, cancelReason, isDelivered, deliveredAt }, { new: true, returnOriginal: false })
     if(order){
         res.status(201).json(order)
     } else {
