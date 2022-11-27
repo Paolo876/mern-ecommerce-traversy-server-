@@ -38,14 +38,14 @@ router.post("/:id/reviews", cookieJwtAuth, asyncHandler(async (req,res) => {
 
     //check if user already created a review
     if(product){        
-        const existingReview = product.reviews.find(item => item.user.toString() === req.params.id)
+        const existingReview = product.reviews.find(item => item.user._id.toString() === req.user.id)
 
         if(existingReview) {
             res.status(404)
             throw new Error('Product already reviewed.')
         }
 
-        product.reviews.push(rating, comment, name);
+        product.reviews.push({rating, comment, name, user: req.user.id});
         product.rating = product.reviews.reduce((acc, item) => Number(item.rating) + Number(acc), 0) / product.reviews.length
         await product.save();
         res.status(201).json({ message: "Review Successfully Added!"})
