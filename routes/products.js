@@ -2,6 +2,7 @@ const express = require("express");
 const asyncHandler = require("express-async-handler");
 const router = express.Router();
 const Product = require("../models/productModel");
+const cookieJwtAuth = require("../middlewares/cookieJwtAuth");
 
 /*  @desc       Fetch all products
  *  @route      GET /api/products
@@ -20,6 +21,34 @@ router.get("/:id", asyncHandler(async (req,res) => {
     const product = await Product.findById(req.params.id )
     if(product){        
         res.send(product)
+    } else {
+        res.status(404)
+        throw new Error('Product not found.')
+    }
+}))
+
+
+/*  @desc       Create new review
+ *  @route      POST /api/products/:id/reviews
+ *  @access     Private
+ */
+router.post("/:id/reviews", cookieJwtAuth, asyncHandler(async (req,res) => {
+    const { rating, comment, name } = req.body;
+    const product = await Product.findById(req.params.id)
+
+    //check if user already created a review
+    if(product){        
+        const existingReview = product.reviews.find(item => item.user.toString() === req.params.id)
+
+        if(existingReview) {
+            res.status(404)
+            throw new Error('Product already reviewed.')
+        }
+
+        product.reviews.push(rating, comment, name);
+        product.rating = product.reviews.reduce((acc, item) => Number(item.rating) + Number(acc), 0) / product.reviews.length
+        await product.save();
+        res.status(201).json({ message: "Review Successfully Added!"})
     } else {
         res.status(404)
         throw new Error('Product not found.')
