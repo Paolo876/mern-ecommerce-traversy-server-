@@ -9,7 +9,14 @@ const cookieJwtAuth = require("../middlewares/cookieJwtAuth");
  *  @access     Public
  */
 router.get("/", asyncHandler(async (req,res) => {
-    const products = await Product.find({}).populate("reviews.user", "id name email")
+    const keyword = req.query.keyword 
+        ? {
+            name: {
+                    $regex: req.query.keyword,
+                    $options: 'i'   //<-- case insensitive
+                }
+        } : {};
+    const products = await Product.find(keyword).populate("reviews.user", "id name email")
     res.send(products)
 }))
 
