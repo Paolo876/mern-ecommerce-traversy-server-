@@ -9,6 +9,9 @@ const cookieJwtAuth = require("../middlewares/cookieJwtAuth");
  *  @access     Public
  */
 router.get("/", asyncHandler(async (req,res) => {
+    const pageSize = 2; // <--limit data fetched (pagination)
+    const page = Number(req.query.pageNumber) || 1;
+
     const keyword = req.query.keyword 
         ? {
             name: {
@@ -16,8 +19,9 @@ router.get("/", asyncHandler(async (req,res) => {
                     $options: 'i'   //<-- case insensitive
                 }
         } : {};
-    const products = await Product.find(keyword).populate("reviews.user", "id name email")
-    res.send(products)
+    const count = await Product.countDocuments({...keyword}) //count products quantity
+    const products = await Product.find(keyword).limit(pageSize).skip(pageSize * ( page - 1)).populate("reviews.user", "id name email")
+    res.json({products, page, pages: Math.ceil(count / pageSize)})
 }))
 
 /*  @desc       Fetch product by id
