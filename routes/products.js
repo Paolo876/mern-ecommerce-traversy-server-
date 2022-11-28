@@ -9,9 +9,8 @@ const cookieJwtAuth = require("../middlewares/cookieJwtAuth");
  *  @access     Public
  */
 router.get("/", asyncHandler(async (req,res) => {
-    const pageSize = 2; // <--limit data fetched (pagination)
+    const pageSize = 15; // <--limit data fetched (pagination)
     const page = Number(req.query.pageNumber) || 1;
-
     const keyword = req.query.keyword 
         ? {
             name: {
@@ -21,6 +20,26 @@ router.get("/", asyncHandler(async (req,res) => {
         } : {};
     const count = await Product.countDocuments({...keyword}) //count products quantity
     const products = await Product.find(keyword).limit(pageSize).skip(pageSize * ( page - 1)).populate("reviews.user", "id name email")
+    res.json({products, page, pages: Math.ceil(count / pageSize)})
+}))
+
+/*  @desc       Fetch products by sort/filter
+ *  @route      GET /api/products
+ *  @access     Public
+ */
+router.get("/sortBy", asyncHandler(async (req,res) => {
+    const pageSize = 15; // <--limit data fetched (pagination)
+    const page = Number(req.query.pageNumber) || 1;
+    const sortBy = req.query.sortBy;
+    const keyword = req.query.keyword 
+        ? {
+            name: {
+                    $regex: req.query.keyword,
+                    $options: 'i'   //<-- case insensitive
+                }
+        } : {};
+    const count = await Product.countDocuments({...keyword}) //count products quantity
+    const products = await Product.find(keyword).limit(pageSize).sort({ [sortBy]: -1}).skip(pageSize * ( page - 1)).populate("reviews.user", "id name email")
     res.json({products, page, pages: Math.ceil(count / pageSize)})
 }))
 
