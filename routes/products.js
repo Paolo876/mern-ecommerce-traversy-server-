@@ -27,10 +27,10 @@ router.get("/", asyncHandler(async (req,res) => {
  *  @route      GET /api/products
  *  @access     Public
  */
-router.get("/sortBy", asyncHandler(async (req,res) => {
+router.get("/q", asyncHandler(async (req,res) => {
     const pageSize = 15; // <--limit data fetched (pagination)
     const page = Number(req.query.pageNumber) || 1;
-    const sortBy = req.query.sortBy;
+    const sortValue = req.query.sort;
     const keyword = req.query.keyword 
         ? {
             name: {
@@ -39,9 +39,20 @@ router.get("/sortBy", asyncHandler(async (req,res) => {
                 }
         } : {};
     const count = await Product.countDocuments({...keyword}) //count products quantity
-    const products = await Product.find(keyword).limit(pageSize).sort({ [sortBy]: -1}).skip(pageSize * ( page - 1)).populate("reviews.user", "id name email")
+    const products = await Product.find(keyword).limit(pageSize).sort({ [sortValue]: -1}).skip(pageSize * ( page - 1)).populate("reviews.user", "id name email")
     res.json({products, page, pages: Math.ceil(count / pageSize)})
 }))
+
+
+/*  @desc       showcase most popular products
+ *  @route      GET /api/products
+ *  @access     Public
+ */
+router.get("/showcase", asyncHandler(async (req,res) => {
+    const products = await Product.find({}).limit(5).sort({ rating: -1}).populate("reviews.user", "id name email")
+    res.json({ products })
+}))
+
 
 /*  @desc       Fetch product by id
  *  @route      GET /api/products/:id
