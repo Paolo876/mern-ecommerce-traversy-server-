@@ -4,7 +4,6 @@ const connectDB = require("./config/db");
 const { notFound, errorHandler } = require("./middlewares/errorMiddleware");
 const cookieParser = require("cookie-parser");
 // const bodyParser = require('body-parser')
-await connectDB();
 const app = express(); //init express
 require("dotenv").config();
 app.use(cookieParser());
@@ -26,4 +25,7 @@ app.use(notFound)
 app.use(errorHandler)
 
 const port = process.env.PORT || 3001
-app.listen(port, () => console.log("running on port:".yellow.bold, port))
+app.listen(port, async () => {
+    await connectDB();
+    console.log("running on port:".yellow.bold, port)
+})
