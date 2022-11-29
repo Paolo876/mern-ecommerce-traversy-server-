@@ -4,7 +4,7 @@ const connectDB = require("./config/db");
 const { notFound, errorHandler } = require("./middlewares/errorMiddleware");
 const cookieParser = require("cookie-parser");
 // const bodyParser = require('body-parser')
-connectDB();
+await connectDB();
 const app = express(); //init express
 require("dotenv").config();
 app.use(cookieParser());
