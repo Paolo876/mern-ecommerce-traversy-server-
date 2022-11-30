@@ -5,8 +5,8 @@ const { notFound, errorHandler } = require("./middlewares/errorMiddleware");
 const cookieParser = require("cookie-parser");
 const app = express(); //init express
 //netlify - heroku cookie fix
-app.set("trust proxy", 1)
-
+// app.set("trust proxy", 1)
+app.enable("trust proxy")
 require("dotenv").config();
 app.use(cookieParser());
 app.use(cors({credentials: true, origin: 'http://localhost:3000' }));    //to allow api connection from computer to react project
