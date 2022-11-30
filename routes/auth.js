@@ -21,7 +21,7 @@ router.post("/login", asyncHandler(async (req,res) => {
             name: user.name,
             email: user.email,
             isAdmin: user.isAdmin }
-        res.cookie("token", generateToken(responseData._id), { httpOnly: true, domain: process.env.ORIGIN ? "netlify" : 'localhost' }) //send the user id on token
+        res.cookie("token", generateToken(responseData._id), { httpOnly: true, secure: true, domain: process.env.ORIGIN ? ".netlify.app" : 'localhost' }) //send the user id on token
         res.send(responseData)
     } else {
         res.status(401)
@@ -61,7 +61,7 @@ router.post("/register", asyncHandler( async (req,res) => {
     const user = await User.create({ name, email, password })
 
     if(user){  
-        res.cookie("token", generateToken(user._id), { httpOnly: true, domain: process.env.ORIGIN ? "netlify" : 'localhost'  }) //send the user id on token
+        res.cookie("token", generateToken(user._id), { httpOnly: true, secure: true, domain: process.env.ORIGIN ? ".netlify.app" : 'localhost'  }) //send the user id on token
         res.status(201).send({
             _id: user._id,
             name: user.name,
@@ -80,7 +80,7 @@ router.post("/register", asyncHandler( async (req,res) => {
  *  @access     Public
  */
 router.get("/logout", asyncHandler( async (req,res) => {
-    res.cookie("token", 'none', { httpOnly: true, domain: process.env.ORIGIN ? "netlify" : 'localhost', expires: new Date(Date.now() + 2 * 1000) })
+    res.cookie("token", 'none', { httpOnly: true, secure: true, domain: process.env.ORIGIN ? ".netlify.app" : 'localhost', expires: new Date(Date.now() + 2 * 1000) })
     res
         .status(201)
         .send({ success: true, message: 'User logged out successfully' })
