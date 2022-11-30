@@ -6,22 +6,10 @@ const cookieParser = require("cookie-parser");
 const app = express(); //init express
 //netlify - heroku cookie fix
 app.set("trust proxy", 1)
-// app.use(
-//     session({
-//       secret: process.env.SESSION_SECRET || 'Super Secret (change it)',
-//       resave: true,
-//       saveUninitialized: false,
-//       cookie: {
-//         sameSite: 'none',
-//         secure: 'true'
-//       }
-//     })
-//   );
 
 require("dotenv").config();
 app.use(cookieParser());
-app.use(cors({credentials: true, origin: process.env.ORIGIN || 'http://localhost:3000'}));    //to allow api connection from computer to react project
-// app.use(cors({credentials: true}));    //to allow api connection from computer to react project
+app.use(cors({credentials: true, origin: process.env.ORIGIN || 'http://localhost:3000' }));    //to allow api connection from computer to react project
 app.use(express.json({ limit: "20mb" }));    // allow json data in req.body
 //routes
 app.get("/", (req,res) => res.send("APP IS ONLINE..."))
