@@ -2,9 +2,9 @@ const mongoose = require("mongoose");
 const colors = require("colors");
 require("dotenv").config();
 
-const connectDB = () => {
+const connectDB = async () => {
     try {
-        const db = mongoose.connect(process.env.MONGO_URI)
+        const db = await mongoose.connect(process.env.MONGO_URI)
         mongoose.set('bufferCommands', false);
         console.log("mongodb connected:".cyan.underline.bold, db.connection.host)
     } catch (error) {

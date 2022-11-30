@@ -21,7 +21,7 @@ router.post("/login", asyncHandler(async (req,res) => {
             name: user.name,
             email: user.email,
             isAdmin: user.isAdmin }
-        res.cookie("token", generateToken(responseData._id), { httpOnly: true }) //send the user id on token
+        res.cookie("token", generateToken(responseData._id), { httpOnly: true,  }) //send the user id on token
         res.send(responseData)
     } else {
         res.status(401)
