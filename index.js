@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const connectDB = require("./config/db");
+connectDB()
 const { notFound, errorHandler } = require("./middlewares/errorMiddleware");
 const cookieParser = require("cookie-parser");
 const app = express(); //init express
@@ -29,6 +30,5 @@ app.use(errorHandler)
 
 const port = process.env.PORT || 3001
 app.listen(port, async () => {
-    connectDB()
     console.log("running on port:".yellow.bold, port)
 })
