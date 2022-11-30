@@ -7,15 +7,6 @@ const app = express(); //init express
 //netlify - heroku cookie fix
 // app.set("trust proxy", 1)
 app.enable("trust proxy")
-app.use(express.session({
-    secret : 'somesecret',
-    key : 'sid',
-    proxy : true, // add this when behind a reverse proxy, if you need secure cookies
-    cookie : {
-        secure : true,
-        maxAge: 5184000000 // 2 months
-    }
-}));
 
 require("dotenv").config();
 app.use(cookieParser());
