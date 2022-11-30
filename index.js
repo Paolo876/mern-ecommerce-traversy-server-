@@ -11,7 +11,7 @@ app.enable("trust proxy")
 
 require("dotenv").config();
 app.use(cookieParser());
-app.use(cors({credentials: true, origin: 'http://localhost:3000' }));    //to allow api connection from computer to react project
+app.use(cors({credentials: true, origin: process.env.ORIGIN || 'http://localhost:3000',  }));    //to allow api connection from computer to react project
 // app.use(cors({credentials: true, origin: '*' }));    //to allow api connection from computer to react project
 app.use(express.json({ limit: "20mb" }));    // allow json data in req.body
 //routes
