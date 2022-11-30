@@ -7,6 +7,16 @@ const app = express(); //init express
 //netlify - heroku cookie fix
 // app.set("trust proxy", 1)
 app.enable("trust proxy")
+app.use(express.session({
+    secret : 'somesecret',
+    key : 'sid',
+    proxy : true, // add this when behind a reverse proxy, if you need secure cookies
+    cookie : {
+        secure : true,
+        maxAge: 5184000000 // 2 months
+    }
+}));
+
 require("dotenv").config();
 app.use(cookieParser());
 app.use(cors({credentials: true, origin: 'http://localhost:3000' }));    //to allow api connection from computer to react project
