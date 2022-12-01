@@ -5,24 +5,18 @@ connectDB()
 const { notFound, errorHandler } = require("./middlewares/errorMiddleware");
 const cookieParser = require("cookie-parser");
 const app = express(); //init express
-//netlify - heroku cookie fix
-// app.set("trust proxy", 1)
 app.enable("trust proxy")
-
 require("dotenv").config();
 app.use(cookieParser());
 app.use(cors(
     {
         credentials: true, 
-        // origin: process.env.ORIGIN || 'http://localhost:3000',  
         origin:  ["https://proshop-mern-traversy.netlify.app", "https://mern-ecommerce-traversy.vercel.app", "http://localhost:3000"],
-        
         methods: ["POST", "GET", "PUT", "DELETE"],
         preflightContinue: true,
-
-}));    //to allow api connection from computer to react project
-// app.use(cors({credentials: true, origin: '*' }));    //to allow api connection from computer to react project
+}));//to allow api connection from computer to react project
 app.use(express.json({ limit: "20mb" }));    // allow json data in req.body
+
 //routes
 app.get("/", (req,res) => res.send("APP IS ONLINE..."))
 app.use("/api/products", require("./routes/products"))

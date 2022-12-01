@@ -22,7 +22,7 @@ router.post("/login", asyncHandler(async (req,res) => {
             email: user.email,
             isAdmin: user.isAdmin }
         res.cookie("token", generateToken(responseData._id), { secure: true, sameSite: "none" }) //send the user id on token
-        res.send({...responseData, token: generateToken(responseData._id)})
+        res.send(responseData)
     } else {
         res.status(401)
         throw new Error("Invalid email or password.")
@@ -67,7 +67,6 @@ router.post("/register", asyncHandler( async (req,res) => {
             name: user.name,
             email: user.email,
             isAdmin: user.isAdmin,
-            token: generateToken(responseData._id)
         })
     } else {
         res.status(400)
