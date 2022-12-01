@@ -14,7 +14,8 @@ app.use(cookieParser());
 app.use(cors(
     {
         credentials: true, 
-        origin: process.env.ORIGIN || 'http://localhost:3000',  
+        // origin: process.env.ORIGIN || 'http://localhost:3000',  
+        origin:  ["https://proshop-mern-traversy.netlify.app", "https://www.paolobugarinmernheroku.xyz", "http://localhost:3000"],
 
 }));    //to allow api connection from computer to react project
 // app.use(cors({credentials: true, origin: '*' }));    //to allow api connection from computer to react project
