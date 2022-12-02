@@ -14,6 +14,8 @@ app.use(cors(
         origin:  ["https://proshop-mern-traversy.netlify.app", "https://mern-ecommerce-traversy.vercel.app", "http://localhost:3000"],
         methods: ["POST", "GET", "PUT", "DELETE"],
         preflightContinue: true,
+        allowedHeaders: ['Content-Type', 'Authorization', "Cookie"]
+        
 }));//to allow api connection from computer to react project
 app.use(express.json({ limit: "20mb" }));    // allow json data in req.body
 
