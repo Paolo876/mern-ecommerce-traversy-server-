@@ -22,7 +22,7 @@ router.post("/login", asyncHandler(async (req,res) => {
             email: user.email,
             isAdmin: user.isAdmin }
         const token = generateToken(responseData._id)
-        res.cookie("token", token, { secure: true, sameSite: "none", path:"/", httpOnly: true }) //send the user id on token
+        res.cookie("token", token, { secure: true, sameSite: "none", path:"/", domain: "paolobugarin.tk", httpOnly: true }) //send the user id on token
         // res.cookie("token", token, { secure: true, sameSite: "none", path:"/", domain:"vercel.app", httpOnly: true }) //send the user id on token
         // res.cookie("token", token, { secure: true, sameSite: "none"}) //send the user id on token
         res.send({...responseData, token})
