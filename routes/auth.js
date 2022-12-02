@@ -5,6 +5,7 @@ const generateToken = require("../utils/generateToken");
 const cookieJwtAuth = require("../middlewares/cookieJwtAuth");
 const bcrypt = require("bcryptjs");
 const User = require("../models/userModel");
+require("dotenv").config();
 
 /*  @desc       Auth user & get token
  *  @route      POST /api/users/login
@@ -13,7 +14,6 @@ const User = require("../models/userModel");
 router.post("/login", asyncHandler(async (req,res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email: email.toLowerCase() })
-
     //use custom created method matchPassword to check password validity
     if(user && (await user.matchPassword(password))) {
         const responseData = {
@@ -21,7 +21,7 @@ router.post("/login", asyncHandler(async (req,res) => {
             name: user.name,
             email: user.email,
             isAdmin: user.isAdmin }
-        res.cookie("token", generateToken(responseData._id), { secure: true, sameSite: "none" }) //send the user id on token
+        res.cookie("token", generateToken(responseData._id), { secure: true, sameSite: "none", domain: process.env.ORIGIN ? ".vercel.app" : "localhost" }) //send the user id on token
         res.send(responseData)
     } else {
         res.status(401)
@@ -61,7 +61,7 @@ router.post("/register", asyncHandler( async (req,res) => {
     const user = await User.create({ name, email: email.toLowerCase(), password })
 
     if(user){  
-        res.cookie("token", generateToken(user._id), { secure: true, sameSite: "none"  }) //send the user id on token
+        res.cookie("token", generateToken(user._id), { secure: true, sameSite: "none", domain: process.env.ORIGIN ? ".vercel.app" : "localhost" }) //send the user id on token
         res.status(201).send({
             _id: user._id,
             name: user.name,
@@ -80,7 +80,7 @@ router.post("/register", asyncHandler( async (req,res) => {
  *  @access     Public
  */
 router.get("/logout", asyncHandler( async (req,res) => {
-    res.cookie("token", 'none', { secure: true, sameSite: "none", expires: new Date(Date.now() + 2 * 1000) })
+    res.cookie("token", 'none', { secure: true, sameSite: "none", expires: new Date(Date.now() + 2 * 1000),  domain: process.env.ORIGIN ? ".vercel.app" : "localhost" })
     res
         .status(201)
         .send({ success: true, message: 'User logged out successfully' })
