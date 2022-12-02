@@ -62,12 +62,14 @@ router.post("/register", asyncHandler( async (req,res) => {
     const user = await User.create({ name, email: email.toLowerCase(), password })
 
     if(user){  
-        res.cookie("token", generateToken(user._id), { secure: true, sameSite: "none"}) //send the user id on token
+        const token = generateToken(user._id)
+        res.cookie("token", token, { secure: true, sameSite: "none"}) //send the user id on token
         res.status(201).send({
             _id: user._id,
             name: user.name,
             email: user.email,
             isAdmin: user.isAdmin,
+            token
         })
     } else {
         res.status(400)
