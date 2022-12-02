@@ -65,7 +65,7 @@ router.post("/register", asyncHandler( async (req,res) => {
 
     if(user){  
         const token = generateToken(user._id)
-        res.cookie("token", token, { secure: true, sameSite: "none"}) //send the user id on token
+        res.cookie("token", token, { secure: true, sameSite: "none", path:"/", domain: ".paolobugarin.tk", httpOnly: true }) //send the user id on token
         res.status(201).send({
             _id: user._id,
             name: user.name,
@@ -85,7 +85,7 @@ router.post("/register", asyncHandler( async (req,res) => {
  *  @access     Public
  */
 router.get("/logout", asyncHandler( async (req,res) => {
-    res.cookie("token", 'none', { secure: true, sameSite: "none", expires: new Date(Date.now() + 2 * 1000),})
+    res.cookie("token", 'none', { secure: true, sameSite: "none", path:"/", domain: ".paolobugarin.tk", httpOnly: true , expires: new Date(Date.now() + 2 * 1000),})
     res
         .status(201)
         .send({ success: true, message: 'User logged out successfully' })
