@@ -11,7 +11,7 @@ app.use(cookieParser());
 app.use(cors(
     {
         credentials: true, 
-        origin:  ["https://www.paolobugarin.tk", "https://mern-ecommerce-traversy.vercel.app", "http://localhost:3000"],
+        origin:  ["https://www.paolobugarin.tk", "https://mern-ecommerce-traversy.vercel.app", "http://localhost:3000", "https://mernshop.paolobugarin.com"],
         methods: ["POST", "GET", "PUT", "DELETE"],
         preflightContinue: true,
         allowedHeaders: ['Content-Type', 'Authorization', "Cookie"],
