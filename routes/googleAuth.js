@@ -23,44 +23,24 @@ router.post("/login", asyncHandler(async (req,res) => {
     const { tokens } = await oAuth2Client.getToken(req.body.code); // exchange code for tokens
     try {
         const client = new OAuth2Client(process.env.OAUTH_CLIENT_ID)
-    
+        console.log(client)
         const ticket = await client.verifyIdToken({
           idToken: tokens.id_token,
           audience: process.env.OAUTH_CLIENT_ID,
         })
-        console.log(ticket)
-        return ticket
+        const payload = await ticket.getPayload()
+        const user = await User.findOne({ email: payload.email.toLowerCase() })
+        if(user){
+            console.log("YES")
+
+        } else {
+            console.log("NONE")
+        }
+        
+        res.json(tokens)
       } catch (error) {
         return { status: 500, data: error }
       } 
-
-    // console.log(tokens)
-    // const userData = getDecodedOAuthJwtGoogle
-    // const tokenInfo = await oAuth2Client.getTokenInfo(
-    //     tokens.access_token
-    //   );
-    //   const auth = new GoogleAuth({
-    //     scopes: 'https://www.googleapis.com/auth/userinfo.profile'
-    //   });
-    // console.log(tokenInfo);
-    // const { email, password } = req.body;
-    // const user = await User.findOne({ email: email.toLowerCase() })
-    // //use custom created method matchPassword to check password validity
-    // if(user && (await user.matchPassword(password))) {
-    //     const responseData = {
-    //         _id: user._id,
-    //         name: user.name,
-    //         email: user.email,
-    //         isAdmin: user.isAdmin }
-    //     const token = generateToken(responseData._id)
-    //     res.cookie("token", token, { secure: true, sameSite: "none", path:"/", domain: ".paolobugarin.com", httpOnly: true }) //send the user id on token
-    //     // res.cookie("token", token, { secure: true, sameSite: "none", path:"/", domain:"vercel.app", httpOnly: true }) //send the user id on token
-    //     // res.cookie("token", token, { secure: true, sameSite: "none"}) //send the user id on token
-    //     res.send({...responseData, token})
-    // } else {
-    //     res.status(401)
-    //     throw new Error("Invalid email or password.")
-    // }
 }))
 
 
