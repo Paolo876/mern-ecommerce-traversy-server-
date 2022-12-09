@@ -41,6 +41,8 @@ router.get("/authorize", cookieJwtAuth, asyncHandler( async (req,res) => {
         name: user.name,
         email: user.email,
         isAdmin: user.isAdmin,
+        picture: user.picture,
+        googleId: user.googleId,
     })
 }))
 
@@ -50,15 +52,15 @@ router.get("/authorize", cookieJwtAuth, asyncHandler( async (req,res) => {
  *  @access     Public
  */
 router.post("/register", asyncHandler( async (req,res) => {
-    const { name, email, password } = req.body;
-    const userExists = await User.findOne({ email: email.toLowerCase() })    //check if user already exists
+    // const { name, email, password } = req.body;
+    const userExists = await User.findOne({ email: req.body.email.toLowerCase() })    //check if user already exists
 
     if(userExists){
         res.status(400)
         throw new Error("User already exists.")
     }
 
-    const user = await User.create({ name, email: email.toLowerCase(), password })
+    const user = await User.create({ ...req.body })
 
     if(user){  
         const token = generateToken(user._id)
@@ -67,6 +69,8 @@ router.post("/register", asyncHandler( async (req,res) => {
             _id: user._id,
             name: user.name,
             email: user.email,
+            picture: user.picture,
+            googleId: user.googleId,
             isAdmin: user.isAdmin,
             token
         })
