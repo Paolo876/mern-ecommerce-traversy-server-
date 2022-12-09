@@ -11,6 +11,15 @@ const userSchema =  mongoose.Schema(
             type: String,  
             required: false,
         },
+        picture: {
+            type: String,  
+            required: false,
+        },
+        isVerified: {
+            type: Boolean,
+            required: true,
+            default: false
+        },
         email: {
             type: String,
             required: true,
@@ -18,7 +27,7 @@ const userSchema =  mongoose.Schema(
         },
         password: {
             type: String,
-            required: true,
+            required: false,
         },
         isAdmin: {
             type: Boolean,
