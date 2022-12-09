@@ -16,7 +16,7 @@ const oAuth2Client = new OAuth2Client(
   );
 
 /*  @desc       Auth user & get token
- *  @route      POST /api/users/login
+ *  @route      POST /api/google-auth/login
  *  @access     Public
  */
 router.post("/login", asyncHandler(async (req,res) => {
@@ -25,10 +25,17 @@ router.post("/login", asyncHandler(async (req,res) => {
         const client = new OAuth2Client(process.env.OAUTH_CLIENT_ID)
         const ticket = await client.verifyIdToken({ idToken: tokens.id_token, audience: process.env.OAUTH_CLIENT_ID })
         const payload = await ticket.getPayload()
-        const user = await User.findOne({ email: payload.email.toLowerCase() }).select("name email _id isAdmin")
+        const user = await User.findOne({ email: payload.email.toLowerCase() })
         if(user){
-            //payload (googleId: payload.sub, picture: payload.picture)
-            console.log(user)
+          res.cookie("token", generateToken(user._id), { secure: true, sameSite: "none", path:"/", domain: process.env.NODE_ENV === "local" ? "localhost": ".paolobugarin.com", httpOnly: true }) //send the user id on token
+          res.send({
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            isAdmin: user.isAdmin,
+            picture: user.picture,
+            googleId: user.googleId,
+          })
 
         } else {
           res.json({noUser: true, userData: { email: payload.email.toLowerCase(), googleId: payload.sub, picture: payload.picture, name: payload.name }})
