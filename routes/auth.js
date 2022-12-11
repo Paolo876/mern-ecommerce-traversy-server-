@@ -143,7 +143,7 @@ router.get("/profile/:id", cookieJwtAuth, asyncHandler( async (req,res) => {
 
 
 /*  @desc       save user shipping address
- *  @route      POST /api/users/address
+ *  @route      POST /api/users/add-address
  *  @access     Private
  */
 router.post("/add-address", cookieJwtAuth, asyncHandler( async (req,res) => {
@@ -164,6 +164,22 @@ router.post("/add-address", cookieJwtAuth, asyncHandler( async (req,res) => {
         // user.addresses.push(req.body)
         // user.save()
         // res.status(200).json(req.body)
+    }
+}))
+
+
+/*  @desc       get user's saved addresses
+ *  @route      GET /api/users/address
+ *  @access     Private
+ */
+router.get("/address", cookieJwtAuth, asyncHandler( async (req,res) => {
+    try {
+        let user = await UserAddresses.find({user: req.user.id})
+        res.status(200).json(user || user.addresses)
+    
+    }catch(err){
+        res.status(400)
+        throw new Error("Failed to fetch data.")
     }
 }))
 
