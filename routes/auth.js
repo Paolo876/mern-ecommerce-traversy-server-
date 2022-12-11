@@ -149,17 +149,21 @@ router.get("/profile/:id", cookieJwtAuth, asyncHandler( async (req,res) => {
 router.post("/add-address", cookieJwtAuth, asyncHandler( async (req,res) => {
     let user = await UserAddresses.findOne({user: req.user.id})
     if(!user){
-        console.log(req.body);
         user = await UserAddresses.create({
             user: req.user.id,
             addresses: [{ ...req.body }]  
         })
-        console.log(user)
-        res.status(200).json(user)
+        res.status(200).json(req.body)
     } else {
-        user.addresses.push(req.body)
-        user.save()
-        res.status(200).json(user)
+        // check if same info is already saved
+        if(user.addresses.some(item => item !== req.body.item)) {
+            console.log("ASD");
+        } else {
+            console.log("NO")
+        }
+        // user.addresses.push(req.body)
+        // user.save()
+        // res.status(200).json(req.body)
     }
 }))
 
