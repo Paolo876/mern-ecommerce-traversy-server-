@@ -53,7 +53,6 @@ router.get("/authorize", cookieJwtAuth, asyncHandler( async (req,res) => {
  *  @access     Public
  */
 router.post("/register", asyncHandler( async (req,res) => {
-    // const { name, email, password } = req.body;
     const userExists = await User.findOne({ email: req.body.email.toLowerCase() })    //check if user already exists
 
     if(userExists){
@@ -148,18 +147,19 @@ router.get("/profile/:id", cookieJwtAuth, asyncHandler( async (req,res) => {
  *  @access     Private
  */
 router.post("/add-address", cookieJwtAuth, asyncHandler( async (req,res) => {
-    req.body;
     let user = await UserAddresses.findOne({user: req.user.id})
     if(!user){
+        console.log(req.body);
         user = await UserAddresses.create({
             user: req.user.id,
             addresses: [{ ...req.body }]  
         })
-        res.status(201).json(user)
+        console.log(user)
+        res.status(200).json(user)
     } else {
         user.addresses.push(req.body)
         user.save()
-        res.status(201).json(user)
+        res.status(200).json(user)
     }
 }))
 
