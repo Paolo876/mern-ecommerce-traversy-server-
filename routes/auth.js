@@ -5,6 +5,7 @@ const generateToken = require("../utils/generateToken");
 const cookieJwtAuth = require("../middlewares/cookieJwtAuth");
 const bcrypt = require("bcryptjs");
 const User = require("../models/userModel");
+const UserAddresses = require("../models/userAddresses")
 require("dotenv").config();
 
 /*  @desc       Auth user & get token
@@ -140,6 +141,28 @@ router.get("/profile/:id", cookieJwtAuth, asyncHandler( async (req,res) => {
         throw new Error("User not found.")
     }
 }))
+
+
+/*  @desc       save user shipping address
+ *  @route      POST /api/users/address
+ *  @access     Private
+ */
+router.post("/add-address", cookieJwtAuth, asyncHandler( async (req,res) => {
+    req.body;
+    let user = await UserAddresses.findOne({user: req.user.id})
+    if(!user){
+        user = await UserAddresses.create({
+            user: req.user.id,
+            addresses: [{ ...req.body }]  
+        })
+        res.status(201).json(user)
+    } else {
+        user.addresses.push(req.body)
+        user.save()
+        res.status(201).json(user)
+    }
+}))
+
 
 
 module.exports = router
