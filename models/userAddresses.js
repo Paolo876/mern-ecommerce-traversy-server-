@@ -9,12 +9,12 @@ module.exports = mongoose.model('UserAddresses', mongoose.Schema(
         },
         addresses: [{
             name: { type: String, required: true},          //name of receipient
-            Address2: { type: String, required: true},      //main address
-            Address1: { type: String, required: false},     // suite or apt number
-            City: { type: String, required: true},          //city
-            State: { type: String, required: true},         //state (shorthand acronym)
-            Zip5: { type: String, required: true},          // 5-digit zip code
-            Zip4: { type: String, required: false},          // zip code extension
+            address2: { type: String, required: true},      //main address
+            address1: { type: String, required: false},     // suite or apt number
+            city: { type: String, required: true},          //city
+            state: { type: String, required: true},         //state (shorthand acronym)
+            zip5: { type: String, required: true},          // 5-digit zip code
+            zip4: { type: String, required: false},          // zip code extension
         }],
     }, {
         timestamps: true
