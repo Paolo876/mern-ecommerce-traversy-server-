@@ -155,6 +155,7 @@ router.post("/add-address", cookieJwtAuth, asyncHandler( async (req,res) => {
         })
         res.status(200).json(req.body.addresses[0])
     } else {
+        if(req.body.isDefault) user.addresses.forEach(item => { item.isDefault = false })   //set all addresses isDefault status to false 
         await user.addresses.push(req.body)
         await user.save()
         res.status(200).json(user.addresses.pop())
