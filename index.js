@@ -27,6 +27,7 @@ app.use("/api/cart", require("./routes/cart"))
 app.use("/api/users", require("./routes/auth"))
 app.use("/api/google-auth", require("./routes/googleAuth"))
 app.use("/api/orders", require("./routes/orders"))
+app.use("/api/order-actions", require("./routes/orderActions"))
 app.use("/api/admin", require("./routes/admin"))
 app.use("/api/imagekit", require("./routes/imagekit"));
 

@@ -26,7 +26,7 @@ router.get("/", cookieJwtAuth, asyncHandler(async (req,res) => {
  *  @access     Private
  */
 router.post("/add", cookieJwtAuth, asyncHandler(async (req,res) => {
-    let cart = await UserCart.findOne({user: req.user.id})
+    const cart = await UserCart.findOne({user: req.user.id})
     const { cartItems } = req.body;
     if(!cart){
         cart = await UserCart.create({
