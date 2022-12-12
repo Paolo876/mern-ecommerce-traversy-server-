@@ -153,17 +153,11 @@ router.post("/add-address", cookieJwtAuth, asyncHandler( async (req,res) => {
             user: req.user.id,
             addresses: [{ ...req.body }]  
         })
-        res.status(200).json(req.body)
+        res.status(200).json(req.body.addresses[0])
     } else {
-        // check if same info is already saved
-        if(user.addresses.some(item => item !== req.body.item)) {
-            console.log("ASD");
-        } else {
-            console.log("NO")
-        }
-        // user.addresses.push(req.body)
-        // user.save()
-        // res.status(200).json(req.body)
+        await user.addresses.push(req.body)
+        await user.save()
+        res.status(200).json(user.addresses.pop())
     }
 }))
 
