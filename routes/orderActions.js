@@ -13,24 +13,28 @@ require("dotenv").config();
 */
 
 
-//get order total       - get user's cartItems, address wil be on request body
-/*  @desc       get user's saved addresses
- *  @route      GET /api/users/address
+/*  @desc       calculate order cost
+ *  @route      POST /api/order-actions/cost-summary
  *  @access     Private
  */
 router.post("/cost-summary", cookieJwtAuth, asyncHandler( async (req,res) => {
     const { address } = req.body;
-    const { cartItems } = await UserCart.findOne({ user: req.user.id }).populate({path: "cartItems", populate: { path: "product"}})
-    console.log(cartItems)
-    res.json(cartItems)
-    // try {
-    //     let user = await UserAddresses.findOne({user: req.user.id})
-    //     res.status(200).json(user && user.addresses || [])
+    const { cartItems } = await UserCart.findOne({ user: req.user.id }).populate({path: "cartItems._id", select: "price"})
     
-    // }catch(err){
-    //     res.status(400)
-    //     throw new Error("Failed to fetch data.")
-    // }
+    const updatedCartItems = cartItems.map(item => ({quantity:item.quantity, price: item._id.price}))
+
+    //calculate total items cost
+    const itemsTotalAmount = (updatedCartItems.reduce(( acc, item) => parseFloat(acc) + parseInt(item.quantity) * parseFloat(item.price), 0).toFixed(2)) || 0
+    //calculate shipping cost (to be implemented <-- address is in req.body)
+    const shippingAmount = 0
+    //calculate tax cost (mock)
+    const taxAmount = itemsTotalAmount * .065
+    const totalAmount = parseFloat(itemsTotalAmount) + parseFloat(shippingAmount) + parseFloat(taxAmount);
+
+
+    res.json({itemsTotalAmount, shippingAmount, taxAmount, totalAmount})
+
+
 }))
 
 module.exports = router
