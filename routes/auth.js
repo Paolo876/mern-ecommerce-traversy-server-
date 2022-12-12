@@ -174,8 +174,8 @@ router.post("/add-address", cookieJwtAuth, asyncHandler( async (req,res) => {
  */
 router.get("/address", cookieJwtAuth, asyncHandler( async (req,res) => {
     try {
-        let user = await UserAddresses.find({user: req.user.id})
-        res.status(200).json(user || user.addresses)
+        let user = await UserAddresses.findOne({user: req.user.id})
+        res.status(200).json(user && user.addresses || [])
     
     }catch(err){
         res.status(400)

@@ -8,6 +8,7 @@ module.exports = mongoose.model('UserAddresses', mongoose.Schema(
             ref: 'User'
         },
         addresses: [{
+            isDefault: { type: Boolean, required: true, default: false},
             name: { type: String, required: true},          //name of receipient
             address2: { type: String, required: true},      //main address
             address1: { type: String, required: false},     // suite or apt number
