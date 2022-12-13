@@ -19,24 +19,24 @@ module.exports = mongoose.model('Product', mongoose.Schema(
             thumbnail: { type: String, required: true},
         },
         bannerImage: {
-            url: { type: String, required: true},
-            id: { type: String, required: true},
-            name: { type: String, required: true},
-            thumbnail: { type: String, required: true},
+            url: { type: String },
+            id: { type: String },
+            name: { type: String },
+            thumbnail: { type: String },
         }, 
         additionalImages: [{
-            url: { type: String, required: true},
-            id: { type: String, required: true},
-            name: { type: String, required: true},
-            thumbnail: { type: String, required: true},
+            url: { type: String },
+            id: { type: String },
+            name: { type: String },
+            thumbnail: { type: String },
         }],
         hasOptions: { type: Boolean, required: true, default: false },
-        productOptions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'ProductOption' }],
+        productOptions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'ProductOption', required: false }],
         brand: {
             type: String,
             required: true,
         },
-        features: [ { value: { type: String, required: true } } ], 
+        features: [ { value: { type: String } } ], 
         category: {
             type: String,
             required: true,
@@ -45,7 +45,7 @@ module.exports = mongoose.model('Product', mongoose.Schema(
             type: String,
             required: true,
         },
-        reviews: [reviewSchema],
+        reviews: [ reviewSchema ],
         rating: {
             type: Number,
             required: true,
@@ -66,6 +66,36 @@ module.exports = mongoose.model('Product', mongoose.Schema(
             required: false,
             default: 0
         },
+        //for shipping
+        weight: {
+            pounds: {
+                type: Number,
+                default: 0
+            },
+            ounces: {
+                type: Number,
+                default: 0
+            },
+        },
+        dimensions: {
+            length: {
+                type: Number,
+                default: 0
+            },
+            width: {
+                type: Number,
+                default: 0
+            },
+            height: {
+                type: Number,
+                default: 0
+            },
+        },
+        isHazardous: {
+            type: Boolean,
+            required: true,
+            default: false
+        }
     }, {
         timestamps: true
     }
