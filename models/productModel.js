@@ -18,6 +18,12 @@ module.exports = mongoose.model('Product', mongoose.Schema(
             name: { type: String, required: true},
             thumbnail: { type: String, required: true},
         },
+        bannerImage: {
+            url: { type: String, required: true},
+            id: { type: String, required: true},
+            name: { type: String, required: true},
+            thumbnail: { type: String, required: true},
+        }, 
         additionalImages: [{
             url: { type: String, required: true},
             id: { type: String, required: true},
