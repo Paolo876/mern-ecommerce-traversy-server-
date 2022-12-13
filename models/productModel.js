@@ -24,6 +24,23 @@ module.exports = mongoose.model('Product', mongoose.Schema(
             name: { type: String, required: true},
             thumbnail: { type: String, required: true},
         }],
+        hasSubCategory: { type: Boolean, required: true, default: false },
+        subCategory:[{
+            type: { type: String, required: false},
+            description: { type: String, required: false},
+            options: [{
+                value: { type: String, required: false},
+                countInStock: { type: String, required: false},
+                description: { type: String, required: false},
+                price: { type: Number, required: false },
+                image: {
+                    url: { type: String, required: false},
+                    id: { type: String, required: false},
+                    name: { type: String, required: false},
+                    thumbnail: { type: String, required: false},
+                }    
+            }]
+        }],
         brand: {
             type: String,
             required: true,
@@ -54,7 +71,7 @@ module.exports = mongoose.model('Product', mongoose.Schema(
         },
         countInStock: {
             type: Number,
-            required: true,
+            required: false,
             default: 0
         },
     }, {
