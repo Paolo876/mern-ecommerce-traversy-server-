@@ -29,6 +29,10 @@ const importData = async () => {
         const sampleProducts = products.map(product => {
             return { ...product, user: adminUser }
         })
+        
+        //add productOptions to products here
+        //iphone
+        //ps4
 
         await Product.insertMany(sampleProducts)    //insert products to product table
 
