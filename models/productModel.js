@@ -36,7 +36,7 @@ module.exports = mongoose.model('Product', mongoose.Schema(
             type: String,
             required: true,
         },
-        features: [ { value: { type: String } } ], 
+        features: [], 
         category: {
             type: String,
             required: true,
