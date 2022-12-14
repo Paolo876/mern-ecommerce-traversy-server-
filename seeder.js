@@ -30,23 +30,16 @@ const importData = async () => {
         const createdUsers = await User.insertMany(users) //insert users to user table
         const createdProductOptions = await ProductOptionModel.insertMany(productOptions) //insert productOptions
 
-        //iphone options
-        // const iphoneOptions =  
-        const adminUser = createdUsers.find(item => item.isAdmin === true);
         //add a user property to products data, set as admin's user info
-        // const sampleProducts = products.map(product => {
-        //     return { ...product, user: adminUser }
-        // })
+        const adminUser = createdUsers.find(item => item.isAdmin === true); 
         const sampleProducts = products.map(item => {
             const optionExists = createdProductOptions.find(_item => _item.product_name === item.product_name)
             if(optionExists) return {...item, user: adminUser, productOptions: [optionExists]}
             return {...item, user: adminUser}}
         )
 
-
         await Product.insertMany(sampleProducts)    //insert products to product table
 
-        // const iphoneProduct = createdProducts
         console.log("Data imported!".green.inverse)
     } catch(err) {
         console.log("Error: ".red.underline.bold, err.message)
