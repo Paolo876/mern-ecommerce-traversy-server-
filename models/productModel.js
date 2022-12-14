@@ -90,6 +90,7 @@ module.exports = mongoose.model('Product', mongoose.Schema(
                 type: Number,
                 default: 0
             },
+            unit: { type: String, default: "in"}
         },
         isHazardous: {
             type: Boolean,
