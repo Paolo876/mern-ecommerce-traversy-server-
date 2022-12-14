@@ -4,8 +4,9 @@ const mongoose = require("mongoose");
 
 module.exports = mongoose.model('ProductOption', mongoose.Schema(
     {
-        product: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "Product"},
-        type: { type: String, required: true},
+        // product: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "Product"},
+        product_name: {type: String, required: true },
+        type: { type: String, required: true },
         description: { type: String, required: false},
         options: [{
             value: { type: String, required: true},

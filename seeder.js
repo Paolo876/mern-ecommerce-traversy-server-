@@ -4,10 +4,13 @@ const mongoose = require("mongoose");
 const colors = require("colors");
 const users = require("./data/users");      //sample data
 const products = require("./data/products");  //sample data
+const productOptions = require("./data/productOption");  //sample data
 const User = require("./models/userModel");
 const Product = require("./models/productModel");
 const Order = require("./models/orderModel");
 const UserCart = require("./models/userCart");
+const UserAddresses = require("./models/userAddresses");
+const ProductOptionModel = require("./models/productOptionModel");
 const connectDB = require("./config/db");
 
 require("dotenv").config();
@@ -21,21 +24,29 @@ const importData = async () => {
         await Product.deleteMany();
         await User.deleteMany();
         await UserCart.deleteMany();
+        await UserAddresses.deleteMany();
+        await ProductOptionModel.deleteMany();
         
         const createdUsers = await User.insertMany(users) //insert users to user table
-        const adminUser = createdUsers.find(item => item.isAdmin === true);
+        const createdProductOptions = await ProductOptionModel.insertMany(productOptions) //insert productOptions
 
+        //iphone options
+        // const iphoneOptions =  
+        const adminUser = createdUsers.find(item => item.isAdmin === true);
         //add a user property to products data, set as admin's user info
-        const sampleProducts = products.map(product => {
-            return { ...product, user: adminUser }
-        })
-        
-        //add productOptions to products here
-        //iphone
-        //ps4
+        // const sampleProducts = products.map(product => {
+        //     return { ...product, user: adminUser }
+        // })
+        const sampleProducts = products.map(item => {
+            const optionExists = createdProductOptions.find(_item => _item.product_name === item.product_name)
+            if(optionExists) return {...item, user: adminUser, productOptions: [optionExists]}
+            return {...item, user: adminUser}}
+        )
+
 
         await Product.insertMany(sampleProducts)    //insert products to product table
 
+        // const iphoneProduct = createdProducts
         console.log("Data imported!".green.inverse)
     } catch(err) {
         console.log("Error: ".red.underline.bold, err.message)

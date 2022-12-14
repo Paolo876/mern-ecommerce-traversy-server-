@@ -12,6 +12,10 @@ module.exports = mongoose.model('Product', mongoose.Schema(
             type: String,
             required: true,
         },
+        product_name: {
+            type: String,
+            required: true,
+        },
         image: {
             url: { type: String, required: true},
             id: { type: String, required: true},
