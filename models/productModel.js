@@ -35,7 +35,8 @@ module.exports = mongoose.model('Product', mongoose.Schema(
             thumbnail: { type: String },
         }],
         hasOptions: { type: Boolean, required: true, default: false },
-        productOptions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'ProductOption', required: false }],
+        // productOptions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'ProductOption', required: false }],
+        productOptions: { type: [mongoose.Schema.Types.ObjectId], ref: 'ProductOption' },
         brand: {
             type: String,
             required: true,

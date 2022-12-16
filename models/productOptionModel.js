@@ -1,7 +1,5 @@
 const mongoose = require("mongoose");
 
-//**not a database model */
-
 module.exports = mongoose.model('ProductOption', mongoose.Schema(
     {
         // product: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "Product"},
