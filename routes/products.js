@@ -70,6 +70,17 @@ router.get("/:id", asyncHandler(async (req,res) => {
 }))
 
 
+/*  @desc       Fetch array of products by id
+ *  @route      POST /api/products/:id
+ *  @access     Public
+ */
+router.post("/product-informations", asyncHandler(async (req,res) => {
+    const productIds = req.body.cartItems.map(item => item._id);
+    const products = await Product.find({'_id': { $in: productIds}}).select("name image price")
+    res.send(products)
+}))
+
+
 /*  @desc       Create new review
  *  @route      POST /api/products/:id/reviews
  *  @access     Private
