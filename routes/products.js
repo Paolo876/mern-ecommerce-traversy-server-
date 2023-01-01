@@ -60,7 +60,7 @@ router.get("/showcase", asyncHandler(async (req,res) => {
  *  @access     Public
  */
 router.get("/:id", asyncHandler(async (req,res) => {
-    const product = await Product.findById(req.params.id )
+    const product = await Product.findById(req.params.id).populate("productOptions", "type options")
     if(product){        
         res.send(product)
     } else {
