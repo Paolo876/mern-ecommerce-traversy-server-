@@ -33,13 +33,13 @@ const importData = async () => {
         //add a user property to products data, set as admin's user info
         const adminUser = createdUsers.find(item => item.isAdmin === true); 
         const sampleProducts = products.map(item => {
-            const optionExists = createdProductOptions.find(_item => _item.product_name === item.product_name)
-            if(optionExists) return {...item, user: adminUser, productOptions: [optionExists]}
+            if(item.hasOptions){
+                const productOptions = createdProductOptions.filter(_item => _item.product_name === item.product_name)
+                if(productOptions.length > 0) return {...item, user: adminUser, productOptions}    
+            }
             return {...item, user: adminUser}}
         )
-
         await Product.insertMany(sampleProducts)    //insert products to product table
-
         console.log("Data imported!".green.inverse)
     } catch(err) {
         console.log("Error: ".red.underline.bold, err.message)

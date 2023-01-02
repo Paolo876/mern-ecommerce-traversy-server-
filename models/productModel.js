@@ -6,7 +6,7 @@ module.exports = mongoose.model('Product', mongoose.Schema(
         user: {
             type: mongoose.Schema.Types.ObjectId,
             required: true,
-            ref: 'User'         //ref adds the relationship between product and user
+            ref: 'User'
         },
         name: {
             type: String,
