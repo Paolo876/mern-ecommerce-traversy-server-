@@ -76,7 +76,7 @@ router.get("/:id", asyncHandler(async (req,res) => {
  */
 router.post("/product-informations", asyncHandler(async (req,res) => {
     const productIds = req.body.cartItems.map(item => item._id);
-    const products = await Product.find({'_id': { $in: productIds}}).select("name image price")
+    const products = await Product.find({'_id': { $in: productIds}}).select("name image price countInStock")
     res.send(products)
 }))
 
