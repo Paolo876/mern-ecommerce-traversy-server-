@@ -40,7 +40,7 @@ router.get("/q", asyncHandler(async (req,res) => {
                 }
         } : {};
     const count = await Product.countDocuments({...keyword}) //count products quantity
-    const products = await Product.find(keyword).limit(pageSize).sort({ [sortValue]: -1}).skip(pageSize * ( page - 1)).populate("reviews.user", "id name email")
+    const products = await Product.find(keyword).limit(pageSize).sort({ [sortValue]: -1}).skip(pageSize * ( page - 1)).populate("reviews.user", "id name email").populate("productOptions", "image price")
     res.json({products, page, pages: Math.ceil(count / pageSize)})
 }))
 
@@ -60,7 +60,7 @@ router.get("/showcase", asyncHandler(async (req,res) => {
  *  @access     Public
  */
 router.get("/:id", asyncHandler(async (req,res) => {
-    const product = await Product.findById(req.params.id).populate("productOptions", "type options")
+    const product = await Product.findById(req.params.id).populate("productOptions", "price image name countInStock")
     if(product){        
         res.send(product)
     } else {
