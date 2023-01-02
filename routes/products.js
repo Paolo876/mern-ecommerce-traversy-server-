@@ -20,7 +20,7 @@ router.get("/", asyncHandler(async (req,res) => {
                 }
         } : {};
     const count = await Product.countDocuments({...keyword}) //count products quantity
-    const products = await Product.find(keyword).limit(pageSize).skip(pageSize * ( page - 1)).populate("reviews.user", "id name email").populate("productOptions", "image price")
+    const products = await Product.find(keyword).limit(pageSize).skip(pageSize * ( page - 1)).populate("reviews.user", "id name email").populate("productOptions", "price image name countInStock")
     res.json({products, page, pages: Math.ceil(count / pageSize)})
 }))
 
@@ -40,7 +40,7 @@ router.get("/q", asyncHandler(async (req,res) => {
                 }
         } : {};
     const count = await Product.countDocuments({...keyword}) //count products quantity
-    const products = await Product.find(keyword).limit(pageSize).sort({ [sortValue]: -1}).skip(pageSize * ( page - 1)).populate("reviews.user", "id name email").populate("productOptions", "image price")
+    const products = await Product.find(keyword).limit(pageSize).sort({ [sortValue]: -1}).skip(pageSize * ( page - 1)).populate("reviews.user", "id name email").populate("productOptions", "price image name countInStock")
     res.json({products, page, pages: Math.ceil(count / pageSize)})
 }))
 
