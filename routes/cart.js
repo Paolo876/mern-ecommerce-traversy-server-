@@ -50,7 +50,7 @@ router.post("/cart-items-information", asyncHandler(async (req,res) => {
  */
 router.post("/add", cookieJwtAuth, asyncHandler(async (req,res) => {
     let cart = await UserCart.findOne({user: req.user.id})
-    const { cartItems } = req.body;
+    const { cartItems } = req.body;     //cartItems array type - adds the items to user's cart
     if(!cart){
         cart = await UserCart.create({
             user: req.user.id,
@@ -58,9 +58,20 @@ router.post("/add", cookieJwtAuth, asyncHandler(async (req,res) => {
         })
         res.status(201).json(cart)
     } else {
+
         for (const reqItem of cartItems){
-            if(hasOption){
-                console.log(cartItems)
+            if(reqItem.hasOption){
+                const existingItem = cart.cartItems.find(item => item.hasOption && item.selectedOption.toString() === reqItem.selectedOption)   //check if item is already in cart, add quantity
+                const productOption = await ProductOption.findById(reqItem.selectedOption);
+
+                if(existingItem){
+                    existingItem.quantity = parseInt(existingItem.quantity) + parseInt(reqItem.quantity)
+                    if(existingItem.quantity > productOption.countInStock) existingItem.quantity = productOption.countInStock
+                } else {
+                    if(reqItem.quantity > productOption.countInStock) reqItem.quantity = productOption.countInStock
+                    cart.cartItems.push({...reqItem, _id: mongoose.Types.ObjectId(reqItem._id), selectedOption: mongoose.Types.ObjectId(reqItem.selectedOption)})
+                }
+
             } else {
                 const existingItem = cart.cartItems.find(item => item._id.toString() === reqItem._id)   //check if item is already in cart, add quantity
                 const product = await Products.findById(reqItem._id); //check product if there is enough in stock
