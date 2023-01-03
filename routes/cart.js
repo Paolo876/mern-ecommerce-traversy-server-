@@ -36,7 +36,7 @@ router.post("/cart-items-information", asyncHandler(async (req,res) => {
         updatedProduct = { ...item, ...product }
         if(item.hasOption){
             const selectedOption = await ProductOption.findById(item.selectedOption).select("name image price countInStock").lean()
-            updatedProduct.selectedOption = selectedOption
+            updatedProduct.selectedOption = selectedOption;
         }
         result.push(updatedProduct)
     }
