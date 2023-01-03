@@ -19,9 +19,8 @@ require("dotenv").config();
  */
 router.post("/cost-summary", cookieJwtAuth, asyncHandler( async (req,res) => {
     const { address } = req.body;
-    const { cartItems } = await UserCart.findOne({ user: req.user.id }).populate({path: "cartItems._id", select: "price"})
-    
-    const updatedCartItems = cartItems.map(item => ({quantity:item.quantity, price: item._id.price}))
+    const { cartItems } = await UserCart.findOne({ user: req.user.id }).populate({path: "cartItems._id", select: "price"}).populate({path: "cartItems.selectedOption", select: "price"})
+    const updatedCartItems = cartItems.map(item => ({quantity:item.quantity, price: item.hasOption ? item.selectedOption.price : item._id.price}))
 
     //calculate total items cost
     const itemsTotalAmount = (updatedCartItems.reduce(( acc, item) => parseFloat(acc) + parseInt(item.quantity) * parseFloat(item.price), 0).toFixed(2)) || 0
