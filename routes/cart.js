@@ -4,6 +4,7 @@ const router = express.Router();
 const UserCart = require("../models/userCart");
 const Products = require("../models/productModel")
 const ProductOption = require("../models/productOptionModel");
+const cartItemSchema = require("../models/cartItemSchema");
 const cookieJwtAuth = require("../middlewares/cookieJwtAuth");
 const mongoose = require("mongoose");
 
@@ -29,25 +30,17 @@ router.get("/", cookieJwtAuth, asyncHandler(async (req,res) => {
 router.post("/cart-items-information", asyncHandler(async (req,res) => {
     const { cartItems } = req.body;
     let result = []
-    // const result = UserCart.
-    // console.log(cartItems)
-    // for(const item of cartItems) {
-    //     // let updatedProduct = item
-    //     // const product = await Products.findById(item._id).select("name image price countInStock")
-    //     // updatedProduct = { ...item, ...product }
-    //     // const updatedProduct = await 
-    //     if(item.hasOption){
-    //         console.log(item.hasOption)
-    //     }
-    //     result.push(updatedProduct)
-    // }
-    // console.log(result)
+    for(const item of cartItems) {
+        let updatedProduct = item
+        const product = await Products.findById(item._id).select("name image price countInStock").lean()
+        updatedProduct = { ...item, ...product }
+        if(item.hasOption){
+            const selectedOption = await ProductOption.findById(item.selectedOption).select("name image price countInStock").lean()
+            updatedProduct.selectedOption = selectedOption
+        }
+        result.push(updatedProduct)
+    }
     res.send(result)
-    // if(cart){
-    //     res.send(cart)
-    // } else {
-    //     res.send({cartItems: []})
-    // }
 }))
 
 /*
