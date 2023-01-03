@@ -88,7 +88,6 @@ router.post("/add", cookieJwtAuth, asyncHandler(async (req,res) => {
         cart.save()
         res.status(201).json(cart)
     }
-
 }))
 
 
@@ -99,15 +98,20 @@ router.post("/add", cookieJwtAuth, asyncHandler(async (req,res) => {
  */
 router.put("/change-quantity", cookieJwtAuth, asyncHandler(async (req,res) => {
     const cart = await UserCart.findOne({user: req.user.id})
-    const reqItem = req.body.item
-    const cartItem = cart.cartItems.find(item => item._id.toString() === reqItem._id)
-    cartItem.quantity = reqItem.quantity;
-
-    const product = await Products.findById(reqItem._id); //check product if there is enough in stock
-    if(cartItem.quantity > product.countInStock) cartItem.quantity = product.countInStock
-
+    const reqItem = req.body.item;
+    if(reqItem.hasOption){
+        const cartItem = cart.cartItems.find(item => item.hasOption && item.selectedOption.toString() === reqItem.selectedOption._id)
+        cartItem.quantity = reqItem.quantity;
+        const productOption = await ProductOption.findById(reqItem.selectedOption);
+        if(cartItem.quantity > productOption.countInStock) cartItem.quantity = productOption.countInStock
+    }else {
+        const cartItem = cart.cartItems.find(item => item._id.toString() === reqItem._id)
+        cartItem.quantity = reqItem.quantity;
+        const product = await Products.findById(reqItem._id); //check product if there is enough in stock
+        if(cartItem.quantity > product.countInStock) cartItem.quantity = product.countInStock
+    }
     cart.save()
-    res.status(201).json(cartItem)
+    res.status(201).json(reqItem)
 }))
 
 /*
