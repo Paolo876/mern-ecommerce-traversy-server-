@@ -3,6 +3,7 @@ const asyncHandler = require("express-async-handler");
 const router = express.Router();
 const UserCart = require("../models/userCart");
 const Products = require("../models/productModel")
+const ProductOption = require("../models/productOptionModel");
 const cookieJwtAuth = require("../middlewares/cookieJwtAuth");
 const mongoose = require("mongoose");
 
@@ -18,6 +19,35 @@ router.get("/", cookieJwtAuth, asyncHandler(async (req,res) => {
     } else {
         res.send({cartItems: []})
     }
+}))
+
+/*
+ *  @desc       get cart items information
+ *  @route      POST /api/cart/cart-items-information
+ *  @access     Public
+ */
+router.post("/cart-items-information", asyncHandler(async (req,res) => {
+    const { cartItems } = req.body;
+    let result = []
+    // const result = UserCart.
+    // console.log(cartItems)
+    // for(const item of cartItems) {
+    //     // let updatedProduct = item
+    //     // const product = await Products.findById(item._id).select("name image price countInStock")
+    //     // updatedProduct = { ...item, ...product }
+    //     // const updatedProduct = await 
+    //     if(item.hasOption){
+    //         console.log(item.hasOption)
+    //     }
+    //     result.push(updatedProduct)
+    // }
+    // console.log(result)
+    res.send(result)
+    // if(cart){
+    //     res.send(cart)
+    // } else {
+    //     res.send({cartItems: []})
+    // }
 }))
 
 /*
