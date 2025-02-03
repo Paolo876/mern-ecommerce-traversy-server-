@@ -11,7 +11,7 @@ app.use(cookieParser());
 app.use(cors(
     {
         credentials: true, 
-        origin:  ["https://www.paolobugarin.tk", "https://mern-ecommerce-traversy.vercel.app", "http://localhost:3000", "https://mernshop.paolobugarin.com"],
+        origin:  ["https://mern-ecommerce-traversy.vercel.app", "http://localhost:3000", "https://mernshop.paolobugarin.dev"],
         methods: ["POST", "GET", "PUT", "DELETE", "OPTIONS"],
         preflightContinue: true,
         allowedHeaders: ['Content-Type', 'Authorization', "Cookie"],
@@ -32,6 +32,7 @@ app.use("/api/admin", require("./routes/admin"))
 app.use("/api/imagekit", require("./routes/imagekit"));
 
 app.get("/api/config/paypal", (req, res) => res.send(process.env.PAYPAL_CLIENT_ID)) //get route to send paypal client id to client
+
 //custom errorhandling (middleware)
 app.use(notFound)
 app.use(errorHandler)

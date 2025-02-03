@@ -27,7 +27,7 @@ router.post("/login", asyncHandler(async (req,res) => {
         const payload = await ticket.getPayload()
         const user = await User.findOne({ email: payload.email.toLowerCase() })
         if(user){
-          res.cookie("token", generateToken(user._id), { secure: true, sameSite: "none", path:"/", domain: process.env.NODE_ENV === "local" ? "localhost": ".paolobugarin.com", httpOnly: true }) //send the user id on token
+          res.cookie("token", generateToken(user._id), { secure: true, sameSite: "none", path:"/", domain: process.env.NODE_ENV === "local" ? "localhost": ".paolobugarin.dev", httpOnly: true }) //send the user id on token
           res.send({
             _id: user._id,
             name: user.name,
