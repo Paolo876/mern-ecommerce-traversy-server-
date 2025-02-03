@@ -2,8 +2,8 @@ const express = require("express");
 const asyncHandler = require("express-async-handler");
 const router = express.Router();
 const generateToken = require("../utils/generateToken");
-const cookieJwtAuth = require("../middlewares/cookieJwtAuth");
-const bcrypt = require("bcryptjs");
+// const cookieJwtAuth = require("../middlewares/cookieJwtAuth");
+// const bcrypt = require("bcryptjs");
 const User = require("../models/userModel");
 const { OAuth2Client, getDecodedOAuthJwtGoogle } = require('google-auth-library');
 
